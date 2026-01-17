@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>resQ – Admin Panel</title>
+</head>
+<body>
+    <nav>
+        <a href="/">Report</a> |
+        <a href="/track">Track</a> |
+        <a href="/login">Admin</a>
+    </nav><hr>
+    <h2>Reported Animals</h2>
+    <a href="/logout">Logout</a><br><br>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>Conditions</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+
+        {% for report in reports %}
+            <tr>
+                <td>{{ report.id }}</td>
+                <td>{{ report.conditions }}</td>
+                <td>{{ report.description or "—" }}</td>
+                <td>{{ report.location }}</td>
+                <td>{{ report.status }}</td>
+                <td>
+                    <form method="POST" action="/update_status">
+                        <input type="hidden" name="id" value="{{ report.id }}">
+                        <select name="status">
+                            <option>Pending</option>
+                            <option>Rescued</option>
+                            <option>Treated</option>
+                        </select>
+                        <button type="submit">Update Status</button>
+                    </form>
+                </td>
+            </tr>
+
+        {% endfor %}
+    </table>
+</body>
+</html>

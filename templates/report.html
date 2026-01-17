@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Animal</title>
+    <script>
+        function toggleOther() {
+            const other = document.getElementById("other");
+            document.getElementById("description").disabled = !other.checked;
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <a href="/">Report</a> |
+        <a href="/track">Track</a> |
+        <a href="/login">Admin</a>
+    </nav>
+    <h2>Report Animal</h2>
+    <p>Report an injured or distressed animal quickly.</p>
+
+    <form method="POST">
+        <label>Condition (select all):</label><br>
+
+        <input type="checkbox" name="conditions" value="Unconscious"> Unconscious<br>
+        <input type="checkbox" name="conditions" value="Bleeding"> Bleeding<br>
+        <input type="checkbox" name="conditions" value="Breathing difficulty"> Breathing difficulty<br>
+        <input type="checkbox" name="conditions" value="Unable to walk"> Unable to walk<br>
+        <input type="checkbox" name="conditions" value="Aggressive"> Aggressive<br>
+        <input type="checkbox" name="conditions" value="Vomiting"> Vomiting<br>
+
+        <input type="checkbox" id="other" name="conditions" value="Other" onclick="toggleOther()">
+        Other<br>
+
+        <textarea id="description" name="description"
+                  placeholder="Describe the situation"
+                  disabled></textarea><br><br>
+
+        <input type="text" name="location" placeholder="Location" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

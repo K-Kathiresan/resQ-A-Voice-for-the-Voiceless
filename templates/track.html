@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Report</title>
+
+    <style>
+        .status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .pending {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .rescued {
+            background-color: #c8f7c5;
+            color: #1b5e20;
+        }
+
+        .treated {
+            background-color: #cce5ff;
+            color: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Report</a> |
+        <a href="/track">Track</a> |
+        <a href="/login">Admin</a>
+    </nav>
+
+    <h2>Track Animal Report</h2>
+    <p>Check the current status of your reported animal.</p>
+
+    <form method="POST">
+        <input type="number" name="report_id" placeholder="Enter Report ID" required>
+        <button type="submit">Track</button>
+    </form>
+
+    <hr>
+
+    {% if report %}
+        <h3>Report Details</h3>
+
+        <p><b>Conditions:</b> {{ report.conditions }}</p>
+        <p><b>Description:</b> {{ report.description or "—" }}</p>
+        <p><b>Location:</b> {{ report.location }}</p>
+
+        <p>
+            <b>Status:</b>
+            <span class="status {{ report.status.strip()|lower }}">
+                {{ report.status }}
+            </span>
+        </p>
+
+    {% elif searched %}
+        <p style="color:red; font-weight:bold;">
+            ❌ No report found for this ID. Please check and try again.
+        </p>
+    {% endif %}
+
+</body>
+</html>
