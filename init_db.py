@@ -12,6 +12,18 @@ CREATE TABLE IF NOT EXISTS reports (
     status TEXT DEFAULT 'Pending'
 )
 """)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS adoption_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    report_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    message TEXT,
+    status TEXT DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (report_id) REFERENCES reports(id)
+)
+""")
 
 conn.commit()
 conn.close()

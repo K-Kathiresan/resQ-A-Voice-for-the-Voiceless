@@ -1,0 +1,27 @@
+<h2>Adoption Requests</h2>
+
+{% if requests %}
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Report ID</th>
+    <th>Name</th>
+    <th>Phone</th>
+    <th>Message</th>
+    <th>Status</th>
+  </tr>
+
+  {% for r in requests %}
+  <tr>
+    <td>{{ r[0] }}</td>
+    <td>{{ r[1] }}</td>
+    <td>{{ r[2] }}</td>
+    <td>{{ r[3] }}</td>
+    <td>{{ r[4] or "—" }}</td>
+    <td>{{ r[5] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+<p>No adoption requests yet.</p>
+{% endif %}

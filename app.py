@@ -77,7 +77,66 @@ def track():
         report=report,
         searched=searched
     )
+# =====================================================
+# ADOPTION – VIEW ADOPTABLE ANIMALS (PUBLIC)
+# Route: /adopt
+# =====================================================
+@app.route("/adopt")
+def adopt():
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
 
+    cursor.execute("SELECT id FROM reports WHERE status = 'Treated'")
+    animals = cursor.fetchall()
+
+    conn.close()
+    return render_template("adopt.html", animals=animals)
+
+# =========================================
+# ADOPTION – ANIMAL DETAILS (PUBLIC)
+# Route: /adopt/<report_id>
+# =========================================
+@app.route("/adopt/<int:report_id>")
+def adopt_details(report_id):
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, conditions, description, location
+        FROM reports
+        WHERE id = ? AND status = 'Treated'
+    """, (report_id,))
+    report = cursor.fetchone()
+
+    conn.close()
+
+    if not report:
+        return "Animal not available for adoption"
+
+    return render_template("adopt_details.html", report=report)
+
+# =========================================
+# ADOPTION – SUBMIT INTEREST (PUBLIC)
+# Route: /adopt_interest/<report_id>
+# =========================================
+@app.route("/adopt_interest/<int:report_id>", methods=["POST"])
+def adopt_interest(report_id):
+    name = request.form["name"]
+    phone = request.form["phone"]
+    message = request.form.get("message")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO adoption_requests (report_id, name, phone, message)
+        VALUES (?, ?, ?, ?)
+    """, (report_id, name, phone, message))
+
+    conn.commit()
+    conn.close()
+
+    return "Adoption interest submitted successfully"
 
 # =====================================================
 # ADMIN LOGIN SECTION
@@ -135,6 +194,30 @@ def update_status():
     conn.close()
 
     return redirect("/admin")
+
+# =========================================
+# ADMIN – VIEW ADOPTION REQUESTS
+# Route: /admin/adoptions
+# =========================================
+@app.route("/admin/adoptions")
+def admin_adoptions():
+    if not session.get("admin"):
+        return redirect("/login")
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, report_id, name, phone, message, status
+        FROM adoption_requests
+        ORDER BY created_at DESC
+    """)
+    requests = cursor.fetchall()
+
+    conn.close()
+
+    return render_template("admin_adoptions.html", requests=requests)
+
 
 
 # =====================================================

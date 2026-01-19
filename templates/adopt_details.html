@@ -1,0 +1,19 @@
+<h2>Animal Details</h2>
+
+<p><strong>Report ID:</strong> {{ report[0] }}</p>
+<p><strong>Condition:</strong> {{ report[1] }}</p>
+<p><strong>Description:</strong> {{ report[2] or "—" }}</p>
+<p><strong>Location:</strong> {{ report[3] }}</p>
+<hr>
+
+<h3>Interested in Adopting?</h3>
+
+<form method="POST" action="/adopt_interest/{{ report[0] }}">
+    <input type="text" name="name" placeholder="Your Name" required><br><br>
+    <input type="text" name="phone" placeholder="Phone Number" required><br><br>
+    <textarea name="message" placeholder="Message (optional)"></textarea><br><br>
+    <button type="submit">I'm Interested</button>
+</form>
+
+
+<a href="/adopt">← Back to Adopt List</a>

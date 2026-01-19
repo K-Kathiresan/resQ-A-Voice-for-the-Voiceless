@@ -1,44 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>resQ – Adopt</title>
-</head>
-<body>
-
-<nav>
-  <a href="/">Report</a> |
-  <a href="/track">Track</a> |
-  <a href="/adopt">Adopt</a> |
-  <a href="/login">Admin</a>
-</nav>
-<hr>
 
 <h2>Animals Available for Adoption</h2>
-<p>These animals have been rescued and treated. You can express interest in adopting them.</p>
 
 {% if animals %}
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>ID</th>
-            <th>Conditions</th>
-            <th>Description</th>
-            <th>Location</th>
-            <th>Status</th>
-        </tr>
-
-        {% for animal in animals %}
-        <tr>
-            <td>{{ animal.id }}</td>
-            <td>{{ animal.conditions }}</td>
-            <td>{{ animal.description or "—" }}</td>
-            <td>{{ animal.location }}</td>
-            <td>{{ animal.status }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+  {% for a in animals %}
+    <p>
+      Animal Report ID: {{ a[0] }}
+      —
+      <a href="/adopt/{{ a[0] }}">View Details</a>
+    </p>
+  {% endfor %}
 {% else %}
-    <p>No animals are currently available for adoption.</p>
+  <p>No animals available for adoption right now.</p>
 {% endif %}
-
-</body>
-</html>
