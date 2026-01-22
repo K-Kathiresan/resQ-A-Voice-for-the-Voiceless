@@ -77,20 +77,27 @@ def track():
         report=report,
         searched=searched
     )
-# =====================================================
-# ADOPTION – VIEW ADOPTABLE ANIMALS (PUBLIC)
-# Route: /adopt
-# =====================================================
 @app.route("/adopt")
 def adopt():
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
 
-    cursor.execute("SELECT id FROM reports WHERE status = 'Treated'")
+    cursor.execute("""
+        SELECT r.id
+        FROM reports r
+        WHERE r.status = 'Treated'
+        AND r.id NOT IN (
+            SELECT report_id
+            FROM adoption_requests
+            WHERE status = 'Approved'
+        )
+    """)
     animals = cursor.fetchall()
 
     conn.close()
     return render_template("adopt.html", animals=animals)
+
+
 
 # =========================================
 # ADOPTION – ANIMAL DETAILS (PUBLIC)
@@ -229,6 +236,33 @@ def admin_adoptions():
 def logout():
     session.clear()
     return redirect("/login")
+
+# =========================================
+# ADMIN – UPDATE ADOPTION REQUEST STATUS
+# Route: /admin/adoption_update
+# =========================================
+@app.route("/admin/adoption_update", methods=["POST"])
+def update_adoption_status():
+    if not session.get("admin"):
+        return redirect("/login")
+
+    request_id = request.form["request_id"]
+    new_status = request.form["status"]
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE adoption_requests
+        SET status = ?
+        WHERE id = ?
+    """, (new_status, request_id))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin/adoptions")
+
 
 
 # =====================================================
