@@ -2,6 +2,7 @@ package com.resq.resq.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ReportRequestDTO {
 
@@ -14,6 +15,9 @@ public class ReportRequestDTO {
 
     @NotBlank(message = "Location is required")
     private String location;
+
+    // IMAGE FIELD
+    private MultipartFile image;
 
     // Getters and Setters
 
@@ -39,5 +43,13 @@ public class ReportRequestDTO {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }

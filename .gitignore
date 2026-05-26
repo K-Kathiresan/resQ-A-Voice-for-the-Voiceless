@@ -7,3 +7,4 @@ target/
 *.war
 *.iml
 .DS_Store
+uploads/

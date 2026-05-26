@@ -1,21 +1,19 @@
 package com.resq.resq.controller;
 
+import com.resq.resq.dto.ApiResponse;
+import com.resq.resq.dto.ReportRequestDTO;
 import com.resq.resq.model.Report;
 import com.resq.resq.service.ReportService;
-
-import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import com.resq.resq.dto.ReportRequestDTO;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -26,50 +24,117 @@ public class ReportController {
     private ReportService reportService;
 
     // CREATE REPORT
-    @PostMapping
-        public ResponseEntity<Report> createReport(
-                @Valid @RequestBody ReportRequestDTO dto) {
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<ApiResponse<Report>> createReport(
+            @ModelAttribute ReportRequestDTO dto) throws IOException {
 
-            Report report = new Report();
+        String uploadDir = System.getProperty("user.dir") + "/uploads/";
 
-            report.setAnimalType(dto.getAnimalType());
-            report.setDescription(dto.getDescription());
-            report.setLocation(dto.getLocation());
+        // Create uploads folder if not exists
+        File uploadFolder = new File(uploadDir);
 
-            Report savedReport = reportService.saveReport(report);
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdir();
+        }
 
-        return new ResponseEntity<>(savedReport, HttpStatus.CREATED);
-}
+        // Generate unique file name
+        String fileName = UUID.randomUUID() + "_"
+                + dto.getImage().getOriginalFilename();
+
+        // Save image
+        dto.getImage().transferTo(
+                new File(uploadDir + fileName));
+
+        // Create report entity
+        Report report = new Report();
+
+        report.setAnimalType(dto.getAnimalType());
+        report.setDescription(dto.getDescription());
+        report.setLocation(dto.getLocation());
+
+        // Save image path
+        report.setImageUrl(fileName);
+
+        Report savedReport = reportService.saveReport(report);
+
+        ApiResponse<Report> response =
+                new ApiResponse<>(
+                        true,
+                        "Report created successfully",
+                        savedReport
+                );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.CREATED);
+    }
 
     // GET ALL REPORTS
     @GetMapping
-        public ResponseEntity<List<Report>> getAllReports() {
+    public ResponseEntity<ApiResponse<List<Report>>> getAllReports() {
 
-            return ResponseEntity.ok(reportService.getAllReports());
-}
+        List<Report> reports = reportService.getAllReports();
 
-        // UPDATE REPORT STATUS
-    @PutMapping("/{id}/status")
-        public ResponseEntity<Report> updateReportStatus(
-                @PathVariable Long id,
-                @RequestParam String status) {
+        ApiResponse<List<Report>> response =
+                new ApiResponse<>(
+                        true,
+                        "Reports fetched successfully",
+                        reports
+                );
 
-            return ResponseEntity.ok(
-                    reportService.updateReportStatus(id, status));
-}
+        return ResponseEntity.ok(response);
+    }
 
-        // GET REPORT BY ID
+    // GET REPORT BY ID
     @GetMapping("/{id}")
-        public ResponseEntity<Report> getReportById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Report>> getReportById(
+            @PathVariable Long id) {
 
-            return ResponseEntity.ok(reportService.getReportById(id));
-}
-        // DELETE REPORT
+        Report report = reportService.getReportById(id);
+
+        ApiResponse<Report> response =
+                new ApiResponse<>(
+                        true,
+                        "Report fetched successfully",
+                        report
+                );
+
+        return ResponseEntity.ok(response);
+    }
+
+    // UPDATE REPORT STATUS
+    @PutMapping("/{id}/status")
+    public ResponseEntity<ApiResponse<Report>> updateReportStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+
+        Report updatedReport =
+                reportService.updateReportStatus(id, status);
+
+        ApiResponse<Report> response =
+                new ApiResponse<>(
+                        true,
+                        "Report status updated successfully",
+                        updatedReport
+                );
+
+        return ResponseEntity.ok(response);
+    }
+
+    // DELETE REPORT
     @DeleteMapping("/{id}")
-        public ResponseEntity<String> deleteReport(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteReport(
+            @PathVariable Long id) {
 
-            reportService.deleteReport(id);
+        reportService.deleteReport(id);
 
-            return ResponseEntity.ok("Report deleted successfully");
-}
+        ApiResponse<String> response =
+                new ApiResponse<>(
+                        true,
+                        "Report deleted successfully",
+                        null
+                );
+
+        return ResponseEntity.ok(response);
+    }
 }

@@ -22,6 +22,8 @@ public class Report {
 
     private String status = "PENDING";
 
+    private String imageUrl;
+
     public Report() {
     }
 
@@ -63,5 +65,13 @@ public class Report {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getImageUrl() {
+    return imageUrl;
+   }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
