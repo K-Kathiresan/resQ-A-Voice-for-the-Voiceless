@@ -3,7 +3,9 @@ package com.resq.resq.model;
 public enum ReportStatus {
 
     PENDING,
-    IN_PROGRESS,
+    ASSIGNED,
+    ON_THE_WAY,
+    RESCUING,
     RESCUED,
-    CANCELLED
+    FAILED
 }

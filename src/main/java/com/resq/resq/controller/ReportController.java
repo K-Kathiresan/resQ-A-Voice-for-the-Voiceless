@@ -1,6 +1,6 @@
 package com.resq.resq.controller;
 
-import com.resq.resq.dto.ApiResponse;
+import com.resq.resq.payload.ApiResponse;
 import com.resq.resq.dto.ReportResponseDTO;
 import com.resq.resq.model.ReportStatus;
 import com.resq.resq.service.ReportService;
@@ -25,6 +25,7 @@ public class ReportController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<ReportResponseDTO>> createReport(
+
             @RequestParam("animalType")
             @NotBlank(message = "Animal type is required")
             String animalType,
@@ -39,6 +40,7 @@ public class ReportController {
 
             @RequestParam("image")
             MultipartFile image
+
     ) throws IOException {
 
         ReportResponseDTO createdReport = reportService.createReport(
@@ -49,7 +51,11 @@ public class ReportController {
         );
 
         ApiResponse<ReportResponseDTO> response =
-                new ApiResponse<>(true, "Report created successfully", createdReport);
+                new ApiResponse<>(
+                        true,
+                        "Report created successfully",
+                        createdReport
+                );
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -60,44 +66,87 @@ public class ReportController {
         List<ReportResponseDTO> reports = reportService.getAllReports();
 
         ApiResponse<List<ReportResponseDTO>> response =
-                new ApiResponse<>(true, "Reports fetched successfully", reports);
+                new ApiResponse<>(
+                        true,
+                        "Reports fetched successfully",
+                        reports
+                );
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ReportResponseDTO>> getReportById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ReportResponseDTO>> getReportById(
+            @PathVariable Long id
+    ) {
 
         ReportResponseDTO report = reportService.getReportById(id);
 
         ApiResponse<ReportResponseDTO> response =
-                new ApiResponse<>(true, "Report fetched successfully", report);
+                new ApiResponse<>(
+                        true,
+                        "Report fetched successfully",
+                        report
+                );
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<ReportResponseDTO>> updateStatus(
+
             @PathVariable Long id,
+
             @RequestParam ReportStatus status
+
     ) {
 
-        ReportResponseDTO updatedReport = reportService.updateStatus(id, status);
+        ReportResponseDTO updatedReport =
+                reportService.updateStatus(id, status);
 
         ApiResponse<ReportResponseDTO> response =
-                new ApiResponse<>(true, "Status updated successfully", updatedReport);
+                new ApiResponse<>(
+                        true,
+                        "Status updated successfully",
+                        updatedReport
+                );
 
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteReport(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteReport(
+            @PathVariable Long id
+    ) {
 
         reportService.deleteReport(id);
 
         ApiResponse<String> response =
-                new ApiResponse<>(true, "Report deleted successfully", null);
+                new ApiResponse<>(
+                        true,
+                        "Report deleted successfully",
+                        null
+                );
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{reportId}/assign/{volunteerId}")
+        public ResponseEntity<ApiResponse<ReportResponseDTO>> assignVolunteer(
+                @PathVariable Long reportId,
+                @PathVariable Long volunteerId
+        ) {
+
+                ReportResponseDTO updatedReport =
+                        reportService.assignVolunteer(reportId, volunteerId);
+
+                ApiResponse<ReportResponseDTO> response =
+                        new ApiResponse<>(
+                                true,
+                                "Volunteer assigned successfully",
+                                updatedReport
+                        );
+
+                return ResponseEntity.ok(response);
+}
 }

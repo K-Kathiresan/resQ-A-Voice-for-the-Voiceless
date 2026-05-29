@@ -5,7 +5,9 @@ import com.resq.resq.exception.FileValidationException;
 import com.resq.resq.exception.ResourceNotFoundException;
 import com.resq.resq.model.Report;
 import com.resq.resq.model.ReportStatus;
+import com.resq.resq.model.Volunteer;
 import com.resq.resq.repository.ReportRepository;
+import com.resq.resq.repository.VolunteerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.resq.resq.model.Volunteer;
+import com.resq.resq.repository.VolunteerRepository;
+
 @Service
 public class ReportService {
 
@@ -27,6 +32,9 @@ public class ReportService {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
+
+    @Autowired
+    private VolunteerRepository volunteerRepository;
 
     public ReportResponseDTO createReport(
             String animalType,
@@ -134,5 +142,21 @@ public class ReportService {
         dto.setUpdatedAt(report.getUpdatedAt());
 
         return dto;
+    }
+
+    public ReportResponseDTO assignVolunteer(Long reportId, Long volunteerId) {
+
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new ResourceNotFoundException("Report not found"));
+
+        Volunteer volunteer = volunteerRepository.findById(volunteerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Volunteer not found"));
+
+        report.setVolunteer(volunteer);
+        report.setStatus(ReportStatus.ASSIGNED);
+
+        Report updatedReport = reportRepository.save(report);
+
+        return mapToDTO(updatedReport);
     }
 }
