@@ -6,6 +6,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.resq.resq.dto.ApiResponse;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,4 +47,19 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(FileValidationException.class)
+public ResponseEntity<ApiResponse<String>> handleFileValidationException(
+        FileValidationException ex
+) {
+
+    ApiResponse<String> response = new ApiResponse<>(
+            false,
+            ex.getMessage(),
+            null
+    );
+
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 }
+}
+

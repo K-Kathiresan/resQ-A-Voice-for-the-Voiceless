@@ -1,139 +1,102 @@
 package com.resq.resq.controller;
 
 import com.resq.resq.dto.ApiResponse;
-import com.resq.resq.dto.ReportRequestDTO;
-import com.resq.resq.model.Report;
+import com.resq.resq.dto.ReportResponseDTO;
+import com.resq.resq.model.ReportStatus;
 import com.resq.resq.service.ReportService;
+
+import jakarta.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/reports")
-@CrossOrigin("*")
 public class ReportController {
 
     @Autowired
     private ReportService reportService;
 
-    // CREATE REPORT
-    @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse<Report>> createReport(
-            @ModelAttribute ReportRequestDTO dto) throws IOException {
+    @PostMapping
+    public ResponseEntity<ApiResponse<ReportResponseDTO>> createReport(
+            @RequestParam("animalType")
+            @NotBlank(message = "Animal type is required")
+            String animalType,
 
-        String uploadDir = System.getProperty("user.dir") + "/uploads/";
+            @RequestParam("description")
+            @NotBlank(message = "Description is required")
+            String description,
 
-        // Create uploads folder if not exists
-        File uploadFolder = new File(uploadDir);
+            @RequestParam("location")
+            @NotBlank(message = "Location is required")
+            String location,
 
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdir();
-        }
+            @RequestParam("image")
+            MultipartFile image
+    ) throws IOException {
 
-        // Generate unique file name
-        String fileName = UUID.randomUUID() + "_"
-                + dto.getImage().getOriginalFilename();
+        ReportResponseDTO createdReport = reportService.createReport(
+                animalType,
+                description,
+                location,
+                image
+        );
 
-        // Save image
-        dto.getImage().transferTo(
-                new File(uploadDir + fileName));
+        ApiResponse<ReportResponseDTO> response =
+                new ApiResponse<>(true, "Report created successfully", createdReport);
 
-        // Create report entity
-        Report report = new Report();
-
-        report.setAnimalType(dto.getAnimalType());
-        report.setDescription(dto.getDescription());
-        report.setLocation(dto.getLocation());
-
-        // Save image path
-        report.setImageUrl(fileName);
-
-        Report savedReport = reportService.saveReport(report);
-
-        ApiResponse<Report> response =
-                new ApiResponse<>(
-                        true,
-                        "Report created successfully",
-                        savedReport
-                );
-
-        return new ResponseEntity<>(
-                response,
-                HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // GET ALL REPORTS
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Report>>> getAllReports() {
+    public ResponseEntity<ApiResponse<List<ReportResponseDTO>>> getAllReports() {
 
-        List<Report> reports = reportService.getAllReports();
+        List<ReportResponseDTO> reports = reportService.getAllReports();
 
-        ApiResponse<List<Report>> response =
-                new ApiResponse<>(
-                        true,
-                        "Reports fetched successfully",
-                        reports
-                );
+        ApiResponse<List<ReportResponseDTO>> response =
+                new ApiResponse<>(true, "Reports fetched successfully", reports);
 
         return ResponseEntity.ok(response);
     }
 
-    // GET REPORT BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Report>> getReportById(
-            @PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ReportResponseDTO>> getReportById(@PathVariable Long id) {
 
-        Report report = reportService.getReportById(id);
+        ReportResponseDTO report = reportService.getReportById(id);
 
-        ApiResponse<Report> response =
-                new ApiResponse<>(
-                        true,
-                        "Report fetched successfully",
-                        report
-                );
+        ApiResponse<ReportResponseDTO> response =
+                new ApiResponse<>(true, "Report fetched successfully", report);
 
         return ResponseEntity.ok(response);
     }
 
-    // UPDATE REPORT STATUS
     @PutMapping("/{id}/status")
-    public ResponseEntity<ApiResponse<Report>> updateReportStatus(
+    public ResponseEntity<ApiResponse<ReportResponseDTO>> updateStatus(
             @PathVariable Long id,
-            @RequestParam String status) {
+            @RequestParam ReportStatus status
+    ) {
 
-        Report updatedReport =
-                reportService.updateReportStatus(id, status);
+        ReportResponseDTO updatedReport = reportService.updateStatus(id, status);
 
-        ApiResponse<Report> response =
-                new ApiResponse<>(
-                        true,
-                        "Report status updated successfully",
-                        updatedReport
-                );
+        ApiResponse<ReportResponseDTO> response =
+                new ApiResponse<>(true, "Status updated successfully", updatedReport);
 
         return ResponseEntity.ok(response);
     }
 
-    // DELETE REPORT
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> deleteReport(
-            @PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteReport(@PathVariable Long id) {
 
         reportService.deleteReport(id);
 
         ApiResponse<String> response =
-                new ApiResponse<>(
-                        true,
-                        "Report deleted successfully",
-                        null
-                );
+                new ApiResponse<>(true, "Report deleted successfully", null);
 
         return ResponseEntity.ok(response);
     }

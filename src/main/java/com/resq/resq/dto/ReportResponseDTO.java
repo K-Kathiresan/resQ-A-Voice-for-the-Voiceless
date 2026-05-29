@@ -1,49 +1,21 @@
-package com.resq.resq.model;
+package com.resq.resq.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.resq.resq.model.ReportStatus;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+public class ReportResponseDTO {
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
-import com.resq.resq.exception.FileValidationException;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-@Entity
-@Table(name = "reports")
-public class Report {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String animalType;
-
     private String description;
-
     private String location;
-    @Enumerated(EnumType.STRING)
-    private ReportStatus status = ReportStatus.PENDING;
-
+    private ReportStatus status;
     private String imageUrl;
-
-    @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Report() {
+    public ReportResponseDTO() {
     }
 
     public Long getId() {
@@ -79,20 +51,15 @@ public class Report {
     }
 
     public ReportStatus getStatus() {
-    return status;
-}
+        return status;
+    }
 
     public void setStatus(ReportStatus status) {
         this.status = status;
-}
+    }
 
     public String getImageUrl() {
-
-        if (imageUrl == null || imageUrl.isEmpty()) {
-            return null;
-        }
-
-        return "http://localhost:8080/uploads/" + imageUrl;
+        return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
