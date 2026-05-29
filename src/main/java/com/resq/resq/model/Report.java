@@ -24,6 +24,9 @@ import com.resq.resq.exception.FileValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 @Entity
 @Table(name = "reports")
 public class Report {
@@ -51,6 +54,10 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "volunteer_id")
     private Volunteer volunteer;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Report() {
     }
@@ -89,11 +96,11 @@ public class Report {
 
     public ReportStatus getStatus() {
     return status;
-}
+    }
 
     public void setStatus(ReportStatus status) {
         this.status = status;
-}
+    }
 
     public String getImageUrl() {
 
@@ -129,5 +136,12 @@ public class Report {
 
     public void setVolunteer(Volunteer volunteer) {
         this.volunteer = volunteer;
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

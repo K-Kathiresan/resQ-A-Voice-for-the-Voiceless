@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.resq.resq.dto.LoginRequestDTO;
 
-import com.resq.resq.jwt.JwtUtil;
+import com.resq.resq.security.JwtUtil;
 
 @Service
 public class AuthService {
