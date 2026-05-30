@@ -107,7 +107,7 @@ GET /api/admin/test
 ## Clone Repository
 
 ```bash
-git clone [<repository-url>](https://github.com/K-Kathiresan/resQ-A-Voice-for-the-Voiceless)
+git clone https://github.com/K-Kathiresan/resQ-A-Voice-for-the-Voiceless.git
 ```
 
 ## Navigate to Project
