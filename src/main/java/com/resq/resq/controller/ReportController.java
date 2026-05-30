@@ -148,5 +148,15 @@ public class ReportController {
                         );
 
                 return ResponseEntity.ok(response);
-}
+        }
+
+        @GetMapping("/my")
+        public ApiResponse<List<ReportResponseDTO>> getMyReports() {
+
+        return new ApiResponse<>(
+                true,
+                "My reports fetched successfully",
+                reportService.getMyReports()
+        );
+        }
 }

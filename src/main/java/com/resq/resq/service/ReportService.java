@@ -5,12 +5,16 @@ import com.resq.resq.exception.FileValidationException;
 import com.resq.resq.exception.ResourceNotFoundException;
 import com.resq.resq.model.Report;
 import com.resq.resq.model.ReportStatus;
+import com.resq.resq.model.User;
 import com.resq.resq.model.Volunteer;
 import com.resq.resq.repository.ReportRepository;
+import com.resq.resq.repository.UserRepository;
 import com.resq.resq.repository.VolunteerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,8 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.resq.resq.model.Volunteer;
-import com.resq.resq.repository.VolunteerRepository;
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 public class ReportService {
@@ -30,11 +33,14 @@ public class ReportService {
     @Autowired
     private ReportRepository reportRepository;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private VolunteerRepository volunteerRepository;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     public ReportResponseDTO createReport(
             String animalType,
@@ -63,6 +69,14 @@ public class ReportService {
             throw new FileValidationException("File size must be less than 5 MB");
         }
 
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
 
         File uploadPath = new File(uploadDir).getAbsoluteFile();
@@ -84,6 +98,9 @@ public class ReportService {
         report.setLocation(location);
         report.setImageUrl(imageUrl);
         report.setStatus(ReportStatus.PENDING);
+
+        // IMPORTANT
+        report.setUser(user);
 
         Report savedReport = reportRepository.save(report);
 
@@ -122,11 +139,32 @@ public class ReportService {
 
     public void deleteReport(Long id) {
 
-        Report report = reportRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Report not found with id: " + id));
+    Report report = reportRepository.findById(id)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Report not found"));
 
-        reportRepository.delete(report);
+    Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    String email = authentication.getName();
+
+    User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new RuntimeException("User not found"));
+
+    boolean isOwner =
+            report.getUser().getId().equals(currentUser.getId());
+
+    boolean isAdmin =
+            currentUser.getRole().name().equals("ADMIN");
+
+    if (!isOwner && !isAdmin) {
+        throw new AccessDeniedException(
+                "You are not allowed to delete this report");
     }
+
+    reportRepository.delete(report);
+}
 
     private ReportResponseDTO mapToDTO(Report report) {
 
@@ -158,5 +196,22 @@ public class ReportService {
         Report updatedReport = reportRepository.save(report);
 
         return mapToDTO(updatedReport);
+    }
+
+        public List<ReportResponseDTO> getMyReports() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Report> reports = reportRepository.findByUser(user);
+
+        return reports.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 }
