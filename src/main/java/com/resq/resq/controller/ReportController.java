@@ -159,4 +159,24 @@ public class ReportController {
                 reportService.getMyReports()
         );
         }
+
+        @PutMapping("/{id}")
+        public ApiResponse<ReportResponseDTO> updateReport(
+                @PathVariable Long id,
+                @RequestParam String animalType,
+                @RequestParam String description,
+                @RequestParam String location
+        ) {
+
+        return new ApiResponse<>(
+                true,
+                "Report updated successfully",
+                reportService.updateReport(
+                        id,
+                        animalType,
+                        description,
+                        location
+                )
+        );
+        }
 }

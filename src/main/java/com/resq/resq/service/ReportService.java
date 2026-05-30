@@ -137,6 +137,47 @@ public class ReportService {
         return mapToDTO(updatedReport);
     }
 
+    public ReportResponseDTO updateReport(
+        Long id,
+        String animalType,
+        String description,
+        String location
+) {
+
+    Report report = reportRepository.findById(id)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Report not found"));
+
+    Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    String email = authentication.getName();
+
+    User currentUser = userRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new RuntimeException("User not found"));
+
+    boolean isOwner =
+            report.getUser().getId().equals(currentUser.getId());
+
+    boolean isAdmin =
+            currentUser.getRole().name().equals("ADMIN");
+
+    if (!isOwner && !isAdmin) {
+        throw new AccessDeniedException(
+                "You are not allowed to update this report");
+    }
+
+    report.setAnimalType(animalType);
+    report.setDescription(description);
+    report.setLocation(location);
+    report.setUpdatedAt(LocalDateTime.now());
+
+    Report updatedReport = reportRepository.save(report);
+
+    return mapToDTO(updatedReport);
+}
+
     public void deleteReport(Long id) {
 
     Report report = reportRepository.findById(id)
