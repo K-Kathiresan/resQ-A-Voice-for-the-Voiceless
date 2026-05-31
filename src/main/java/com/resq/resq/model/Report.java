@@ -103,12 +103,7 @@ public class Report {
     }
 
     public String getImageUrl() {
-
-        if (imageUrl == null || imageUrl.isEmpty()) {
-            return null;
-        }
-
-        return "http://localhost:8080/uploads/" + imageUrl;
+        return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {

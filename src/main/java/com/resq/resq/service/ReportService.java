@@ -89,7 +89,7 @@ public class ReportService {
 
         image.transferTo(destinationFile);
 
-        String imageUrl = "http://localhost:8080/uploads/" + fileName;
+        String imageUrl = "http://127.0.0.1:8080/uploads/" + fileName;
 
         Report report = new Report();
 

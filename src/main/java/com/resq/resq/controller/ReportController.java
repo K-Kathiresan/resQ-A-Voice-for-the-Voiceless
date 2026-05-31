@@ -150,15 +150,6 @@ public class ReportController {
                 return ResponseEntity.ok(response);
         }
 
-        @GetMapping("/my")
-        public ApiResponse<List<ReportResponseDTO>> getMyReports() {
-
-        return new ApiResponse<>(
-                true,
-                "My reports fetched successfully",
-                reportService.getMyReports()
-        );
-        }
 
         @PutMapping("/{id}")
         public ApiResponse<ReportResponseDTO> updateReport(
@@ -179,4 +170,18 @@ public class ReportController {
                 )
         );
         }
+        @GetMapping("/my-reports")
+        public ResponseEntity<ApiResponse<List<ReportResponseDTO>>> getMyReports() {
+
+        List<ReportResponseDTO> reports = reportService.getMyReports();
+
+        ApiResponse<List<ReportResponseDTO>> response =
+                new ApiResponse<>(
+                        true,
+                        "My reports fetched successfully",
+                        reports
+                );
+
+        return ResponseEntity.ok(response);
+}
 }

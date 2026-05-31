@@ -27,22 +27,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private CustomUserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+        protected void doFilterInternal(
+                HttpServletRequest request,
+                HttpServletResponse response,
+                FilterChain filterChain
+        ) throws ServletException, IOException {
 
         String path = request.getServletPath();
 
-        if (path.startsWith("/api/auth")) {
+        System.out.println("Request Path: " + path);
 
-        filterChain.doFilter(request, response);
+        // SKIP JWT CHECK FOR AUTH APIs AND UPLOADED IMAGES
+        if (
+                path.startsWith("/api/auth/") ||
+                path.startsWith("/uploads/")
+        ) {
 
-        return;
+                filterChain.doFilter(request, response);
+                return;
         }
 
         String authHeader = request.getHeader("Authorization");
+
         System.out.println("JWT Filter Executed");
         System.out.println("Authorization Header: " + authHeader);
 
@@ -51,19 +57,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
-            token = authHeader.substring(7);
+                token = authHeader.substring(7);
 
-            email = jwtUtil.extractEmail(token);
-            System.out.println("Extracted Email: " + email);
+                email = jwtUtil.extractEmail(token);
+
+                System.out.println("Extracted Email: " + email);
         }
 
-        if (email != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (
+                email != null &&
+                SecurityContextHolder.getContext().getAuthentication() == null
+        ) {
 
-            UserDetails userDetails =
-                    userDetailsService.loadUserByUsername(email);
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(email);
 
-            if (jwtUtil.validateToken(token, userDetails.getUsername())) {
+                if (jwtUtil.validateToken(token, userDetails.getUsername())) {
 
                 System.out.println("JWT Token Valid");
 
@@ -81,9 +90,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext()
                         .setAuthentication(authenticationToken);
-            }
+                }
         }
 
         filterChain.doFilter(request, response);
-    }
+        }
 }
