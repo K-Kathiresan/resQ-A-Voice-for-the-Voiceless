@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Report</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Create Animal Rescue Report</h1>
+
+    <form id="reportForm">
+
+        <input
+                type="text"
+                id="animalType"
+                placeholder="Enter Animal Type"
+                required
+        >
+
+        <textarea
+                id="description"
+                placeholder="Describe Animal Condition"
+                required
+        ></textarea>
+
+        <input
+                type="text"
+                id="location"
+                placeholder="Enter Location"
+                required
+        >
+
+        <input
+                type="file"
+                id="img"
+                accept="image/*"
+                required
+        >
+
+        <button type="submit">
+            Submit Report
+        </button>
+
+    </form>
+
+</div>
+
+<script src="js/api.js"></script>
+
+<script src="js/create-report.js"></script>
+
+</body>
+
+</html>
