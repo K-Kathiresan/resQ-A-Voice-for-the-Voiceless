@@ -1,0 +1,25 @@
+[33m339c519[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m feat: implement My Reports page with JWT-based report fetching and dynamic image rendering
+[33mb08fcad[m Implement frontend authentication and report creation workflow
+[33ma52bfd0[m Implement frontend authentication flow with JWT integration
+[33m41f2739[m Update README.md
+[33mbb8e76d[m Update README.md
+[33md879ca2[m Update README.md
+[33ma09b9eb[m Update README.md
+[33m0649447[m Add ownership security and multi-role API workflow
+[33m0986bc7[m Add report ownership, my reports API, and delete authorization
+[33m1efa086[m Implement JWT authentication and report ownership mapping
+[33m1140e75[m Implemented Spring Security, BCrypt authentication, and JWT login system
+[33m8175417[m Implemented volunteer workflow and Spring Security setup
+[33me134e41[m Completed backend core setup and image upload functionality
+[33m548fe9f[m Implemented standardized API responses and static image access
+[33m06126b1[m Implemented DTO validation and global exception handling
+[33m727d483[m Updation in main
+[33m9b35789[m Update the main
+[33m3ebc9ca[m Merged master into main
+[33macfc2bd[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m Initial backend setup for resQ Spring Boot project
+[33m9b38b9b[m Update README.md
+[33ma622edf[m Create README.md
+[33m3d270d0[m adoption_approval
+[33m1e50236[m Phase 2 complete: adoption flow implemented
+[33mbc12e88[m Phase - 2 starts : Adoption page added
+[33m17f0874[m Phase 1 complete: report and rescue flow

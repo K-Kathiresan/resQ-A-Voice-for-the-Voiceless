@@ -25,12 +25,26 @@ loginForm.addEventListener("submit", async function (event) {
 
     if (response && response.success) {
 
-        const token = response.data;
+        const token = response.data.token;
+        const role = response.data.role;
 
         localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
 
         alert("Login Successful");
 
-        window.location.href = "dashboard.html";
+        if (role === "CITIZEN") {
+
+            window.location.href = "dashboard.html";
+
+        } else if (role === "VOLUNTEER") {
+
+            window.location.href = "volunteer-dashboard.html";
+
+        } else if (role === "ADMIN") {
+
+            window.location.href = "admin-dashboard.html";
+
+        }
     }
 });
