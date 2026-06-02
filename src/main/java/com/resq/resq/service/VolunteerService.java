@@ -1,7 +1,9 @@
 package com.resq.resq.service;
 
-import com.resq.resq.model.Volunteer;
-import com.resq.resq.repository.VolunteerRepository;
+import com.resq.resq.model.Report;
+import com.resq.resq.model.User;
+import com.resq.resq.repository.ReportRepository;
+import com.resq.resq.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +14,16 @@ import java.util.List;
 public class VolunteerService {
 
     @Autowired
-    private VolunteerRepository volunteerRepository;
+    private ReportRepository reportRepository;
 
-    public Volunteer createVolunteer(Volunteer volunteer) {
-        return volunteerRepository.save(volunteer);
-    }
+    @Autowired
+    private UserRepository userRepository;
 
-    public List<Volunteer> getAllVolunteers() {
-        return volunteerRepository.findAll();
+    public List<Report> getAssignedReports(String email) {
+
+        User volunteer = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Volunteer not found"));
+
+        return reportRepository.findByAssignedVolunteer(volunteer);
     }
 }

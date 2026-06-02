@@ -59,6 +59,10 @@ public class Report {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "assigned_volunteer_id")
+    private User assignedVolunteer;
+
     public Report() {
     }
 
@@ -138,5 +142,12 @@ public class Report {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public User getAssignedVolunteer() {
+        return assignedVolunteer;
+    }
+
+    public void setAssignedVolunteer(User assignedVolunteer) {
+        this.assignedVolunteer = assignedVolunteer;
     }
 }
