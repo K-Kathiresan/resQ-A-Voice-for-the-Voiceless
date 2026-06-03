@@ -51,6 +51,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        .requestMatchers("/uploads/**").permitAll()
+
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/uploads/**"
@@ -60,7 +62,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
 
-                        .requestMatchers("/api/volunteers/**")
+                        .requestMatchers("/api/volunteer/**")
                         .hasAnyRole("VOLUNTEER", "ADMIN")
 
                         .requestMatchers("/api/reports/**")

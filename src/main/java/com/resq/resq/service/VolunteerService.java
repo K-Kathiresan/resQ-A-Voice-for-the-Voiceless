@@ -1,6 +1,12 @@
 package com.resq.resq.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.resq.resq.dto.ReportResponseDTO;
+
 import com.resq.resq.model.Report;
 import com.resq.resq.model.ReportStatus;
 import com.resq.resq.model.User;
@@ -8,82 +14,122 @@ import com.resq.resq.model.User;
 import com.resq.resq.repository.ReportRepository;
 import com.resq.resq.repository.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 @Service
 public class VolunteerService {
 
+    @Autowired
+    private ReportRepository reportRepository;
 
-@Autowired
-private ReportRepository reportRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-@Autowired
-private UserRepository userRepository;
+    public List<ReportResponseDTO> getAssignedReports(
+            String email
+    ) {
 
-public List<ReportResponseDTO> getAssignedReports(String email) {
+        User volunteer =
+                userRepository.findByEmail(email)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Volunteer not found"
+                                )
+                        );
 
-    User volunteer = userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Volunteer not found"));
+        List<Report> reports =
+                reportRepository
+                        .findByAssignedVolunteer(volunteer);
 
-    List reports =
-            reportRepository.findByAssignedVolunteer(volunteer);
-
-    return reports.stream()
-            .map(this::mapToDTO)
-            .toList();
-}
-
-public Report updateReportStatus(
-        Long reportId,
-        ReportStatus status,
-        String email) {
-
-    User volunteer = userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Volunteer not found"));
-
-    Report report = reportRepository.findById(reportId)
-            .orElseThrow(() -> new RuntimeException("Report not found"));
-
-    if (report.getAssignedVolunteer() == null ||
-            !report.getAssignedVolunteer()
-                    .getId()
-                    .equals(volunteer.getId())) {
-
-        throw new RuntimeException(
-                "You are not assigned to this report"
-        );
+        return reports.stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
-    report.setStatus(status);
+    public Report updateReportStatus(
+            Long reportId,
+            ReportStatus status,
+            String email
+    ) {
 
-    return reportRepository.save(report);
-}
+        User volunteer =
+                userRepository.findByEmail(email)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Volunteer not found"
+                                )
+                        );
 
-private ReportResponseDTO mapToDTO(Report report) {
+        Report report =
+                reportRepository.findById(reportId)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Report not found"
+                                )
+                        );
 
-    ReportResponseDTO dto = new ReportResponseDTO();
+        if (
+                report.getAssignedVolunteer() == null ||
 
-    dto.setId(report.getId());
+                !report.getAssignedVolunteer()
+                        .getId()
+                        .equals(volunteer.getId())
+        ) {
 
-    dto.setAnimalType(report.getAnimalType());
+            throw new RuntimeException(
+                    "You are not assigned to this report"
+            );
+        }
 
-    dto.setDescription(report.getDescription());
+        report.setStatus(status);
 
-    dto.setLocation(report.getLocation());
+        return reportRepository.save(report);
+    }
 
-    dto.setStatus(report.getStatus());
+    private ReportResponseDTO mapToDTO(
+            Report report
+    ) {
 
-    dto.setImageUrl(report.getImageUrl());
+        ReportResponseDTO dto =
+                new ReportResponseDTO();
 
-    dto.setCreatedAt(report.getCreatedAt());
+        dto.setId(report.getId());
 
-    dto.setUpdatedAt(report.getUpdatedAt());
+        dto.setAnimalType(
+                report.getAnimalType()
+        );
 
-    return dto;
-}
+        dto.setDescription(
+                report.getDescription()
+        );
 
+        dto.setLocation(
+                report.getLocation()
+        );
 
+        dto.setStatus(
+                report.getStatus()
+        );
+
+        dto.setCreatedAt(
+                report.getCreatedAt()
+        );
+
+        dto.setUpdatedAt(
+                report.getUpdatedAt()
+        );
+
+        dto.setImageUrl(
+                "http://127.0.0.1:8080/uploads/"
+                        + report.getImageUrl()
+        );
+
+        if (report.getAssignedVolunteer() != null) {
+
+            dto.setAssignedVolunteerName(
+                    report.getAssignedVolunteer()
+                            .getName()
+            );
+        }
+
+        return dto;
+    }
 }
