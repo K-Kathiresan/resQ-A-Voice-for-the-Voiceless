@@ -1,95 +1,193 @@
 const logoutBtn = document.getElementById("logoutBtn");
 
 const assignedReportsContainer =
-    document.getElementById("assignedReportsContainer");
+document.getElementById("assignedReportsContainer");
+
+const BASE_URL = "http://localhost:8080";
 
 logoutBtn.addEventListener("click", () => {
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
 
-    window.location.href = "login.html";
+localStorage.removeItem("token");
+localStorage.removeItem("role");
+
+window.location.href = "login.html";
+
 
 });
 
-const reports = [
+async function fetchAssignedReports() {
 
-    {
-        title: "Dog injured near bus stand",
-        description: "Dog unable to walk properly",
-        location: "Chennai",
-        status: "ASSIGNED",
-        imageUrl: "https://placehold.co/300x200"
-    },
 
-    {
-        title: "Cat stuck in drainage",
-        description: "Cat crying continuously",
-        location: "Coimbatore",
-        status: "ON_THE_WAY",
-        imageUrl: "https://placehold.co/300x200"
-    }
+try {
 
-];
+    const token = localStorage.getItem("token");
 
-function renderReports() {
+    if (!token) {
 
-    assignedReportsContainer.innerHTML = "";
+        alert("Please login first");
 
-    reports.forEach((report, index) => {
+        window.location.href = "login.html";
 
-        assignedReportsContainer.innerHTML += `
-
-            <div class="report-card">
-
-                <img
-                    src="${report.imageUrl}"
-                    alt="Animal Image"
-                >
-
-                <h3>${report.title}</h3>
-
-                <p>${report.description}</p>
-
-                <p>
-                    <strong>Location:</strong>
-                    ${report.location}
-                </p>
-
-                <p>
-                    <strong>Status:</strong>
-                    ${report.status}
-                </p>
-
-                <button onclick="updateStatus(${index})">
-                    Update Status
-                </button>
-
-            </div>
-
-        `;
-    });
-}
-
-function updateStatus(index) {
-
-    const currentStatus = reports[index].status;
-
-    if (currentStatus === "ASSIGNED") {
-
-        reports[index].status = "ON_THE_WAY";
-
-    } else if (currentStatus === "ON_THE_WAY") {
-
-        reports[index].status = "RESCUING";
-
-    } else if (currentStatus === "RESCUING") {
-
-        reports[index].status = "RESCUED";
+        return;
 
     }
 
-    renderReports();
+    const response = await fetch(
+        `${BASE_URL}/api/volunteer/reports`,
+        {
+            method: "GET",
+
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    if (!response.ok) {
+
+        throw new Error("Failed to fetch reports");
+
+    }
+
+    const data = await response.json();
+
+    renderReports(data);
+
+} catch (error) {
+
+    console.error(error);
+
+    assignedReportsContainer.innerHTML = `
+        <p>Failed to load assigned reports.</p>
+    `;
+
 }
 
-renderReports();
+
+}
+
+function renderReports(reports) {
+
+assignedReportsContainer.innerHTML = "";
+
+if (reports.length === 0) {
+
+    assignedReportsContainer.innerHTML = `
+        <p>No assigned reports found.</p>
+    `;
+
+    return;
+
+}
+
+reports.forEach((report) => {
+
+    assignedReportsContainer.innerHTML += `
+
+        <div class="report-card">
+
+            <img
+                src="${report.imageUrl}"
+                alt="Animal Image"
+            >
+
+            <h3>${report.animalType}</h3>
+
+            <p>${report.description}</p>
+
+            <p>
+                <strong>Location:</strong>
+                ${report.location}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                ${report.status}
+            </p>
+
+            <button onclick="updateStatus(${report.id}, '${report.status}')">
+                Update Status
+            </button>
+
+        </div>
+
+    `;
+
+});
+
+
+}
+
+function getNextStatus(currentStatus) {
+
+
+if (currentStatus === "ASSIGNED") {
+
+    return "ON_THE_WAY";
+
+}
+
+if (currentStatus === "ON_THE_WAY") {
+
+    return "RESCUING";
+
+}
+
+if (currentStatus === "RESCUING") {
+
+    return "RESCUED";
+
+}
+
+return currentStatus;
+
+
+}
+
+async function updateStatus(reportId, currentStatus) {
+
+
+try {
+
+    const token = localStorage.getItem("token");
+
+    const nextStatus = getNextStatus(currentStatus);
+
+    const response = await fetch(
+        `${BASE_URL}/api/volunteer/reports/${reportId}/status`,
+        {
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+                status: nextStatus
+            })
+        }
+    );
+
+    if (!response.ok) {
+
+        throw new Error("Failed to update status");
+
+    }
+
+    await fetchAssignedReports();
+
+} catch (error) {
+
+    console.error(error);
+
+    alert("Status update failed");
+
+}
+
+
+}
+
+
+fetchAssignedReports();
