@@ -1,5 +1,6 @@
 package com.resq.resq.service;
 
+import com.resq.resq.dto.ReportResponseDTO;
 import com.resq.resq.model.Report;
 import com.resq.resq.model.ReportStatus;
 import com.resq.resq.model.User;
@@ -15,39 +16,74 @@ import java.util.List;
 @Service
 public class VolunteerService {
 
-    @Autowired
-    private ReportRepository reportRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+@Autowired
+private ReportRepository reportRepository;
 
-    public List<Report> getAssignedReports(String email) {
+@Autowired
+private UserRepository userRepository;
 
-        User volunteer = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Volunteer not found"));
+public List<ReportResponseDTO> getAssignedReports(String email) {
 
-        return reportRepository.findByAssignedVolunteer(volunteer);
+    User volunteer = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Volunteer not found"));
+
+    List reports =
+            reportRepository.findByAssignedVolunteer(volunteer);
+
+    return reports.stream()
+            .map(this::mapToDTO)
+            .toList();
+}
+
+public Report updateReportStatus(
+        Long reportId,
+        ReportStatus status,
+        String email) {
+
+    User volunteer = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Volunteer not found"));
+
+    Report report = reportRepository.findById(reportId)
+            .orElseThrow(() -> new RuntimeException("Report not found"));
+
+    if (report.getAssignedVolunteer() == null ||
+            !report.getAssignedVolunteer()
+                    .getId()
+                    .equals(volunteer.getId())) {
+
+        throw new RuntimeException(
+                "You are not assigned to this report"
+        );
     }
 
-    public Report updateReportStatus(
-            Long reportId,
-            ReportStatus status,
-            String email) {
+    report.setStatus(status);
 
-        User volunteer = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Volunteer not found"));
+    return reportRepository.save(report);
+}
 
-        Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Report not found"));
+private ReportResponseDTO mapToDTO(Report report) {
 
-        if (report.getAssignedVolunteer() == null ||
-                !report.getAssignedVolunteer().getId().equals(volunteer.getId())) {
+    ReportResponseDTO dto = new ReportResponseDTO();
 
-            throw new RuntimeException("You are not assigned to this report");
-        }
+    dto.setId(report.getId());
 
-        report.setStatus(status);
+    dto.setAnimalType(report.getAnimalType());
 
-        return reportRepository.save(report);
-    }
+    dto.setDescription(report.getDescription());
+
+    dto.setLocation(report.getLocation());
+
+    dto.setStatus(report.getStatus());
+
+    dto.setImageUrl(report.getImageUrl());
+
+    dto.setCreatedAt(report.getCreatedAt());
+
+    dto.setUpdatedAt(report.getUpdatedAt());
+
+    return dto;
+}
+
+
 }

@@ -1,5 +1,6 @@
 package com.resq.resq.controller;
 
+import com.resq.resq.dto.ReportResponseDTO;
 import com.resq.resq.dto.UpdateStatusRequest;
 import com.resq.resq.model.Report;
 import com.resq.resq.service.VolunteerService;
@@ -14,29 +15,32 @@ import java.util.List;
 @RequestMapping("/api/volunteer")
 public class VolunteerController {
 
-    @Autowired
-    private VolunteerService volunteerService;
 
-    @GetMapping("/reports")
-    public List<Report> getAssignedReports(Authentication authentication) {
+@Autowired
+private VolunteerService volunteerService;
 
-        String email = authentication.getName();
+@GetMapping("/reports")
+public List<ReportResponseDTO> getAssignedReports(
+        Authentication authentication) {
 
-        return volunteerService.getAssignedReports(email);
-    }
+    String email = authentication.getName();
 
-    @PutMapping("/reports/{id}/status")
-    public Report updateStatus(
-            @PathVariable Long id,
-            @RequestBody UpdateStatusRequest request,
-            Authentication authentication) {
+    return volunteerService.getAssignedReports(email);
+}
 
-        String email = authentication.getName();
+@PutMapping("/reports/{id}/status")
+public Report updateStatus(
+        @PathVariable Long id,
+        @RequestBody UpdateStatusRequest request,
+        Authentication authentication) {
 
-        return volunteerService.updateReportStatus(
-                id,
-                request.getStatus(),
-                email
-        );
-    }
+    String email = authentication.getName();
+
+    return volunteerService.updateReportStatus(
+            id,
+            request.getStatus(),
+            email
+    );
+}
+
 }

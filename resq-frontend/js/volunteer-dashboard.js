@@ -69,6 +69,7 @@ try {
 
 function renderReports(reports) {
 
+
 assignedReportsContainer.innerHTML = "";
 
 if (reports.length === 0) {
@@ -78,10 +79,16 @@ if (reports.length === 0) {
     `;
 
     return;
-
 }
 
 reports.forEach((report) => {
+
+    const statusClass =
+        `status-${report.status.toLowerCase()}`;
+
+    const isCompleted =
+        report.status === "RESCUED" ||
+        report.status === "FAILED";
 
     assignedReportsContainer.innerHTML += `
 
@@ -101,14 +108,32 @@ reports.forEach((report) => {
                 ${report.location}
             </p>
 
-            <p>
-                <strong>Status:</strong>
+            <div class="status-badge ${statusClass}">
                 ${report.status}
-            </p>
+            </div>
 
-            <button onclick="updateStatus(${report.id}, '${report.status}')">
-                Update Status
-            </button>
+            <div class="button-group">
+
+                <button
+                    class="success-btn"
+                    onclick="updateStatus(${report.id}, '${report.status}')"
+                    ${isCompleted ? "disabled" : ""}
+                >
+                    ${isCompleted ? "Completed" : "Next Status"}
+                </button>
+
+                ${!isCompleted ? `
+
+                    <button
+                        class="failed-btn"
+                        onclick="markAsFailed(${report.id})"
+                    >
+                        Mark Failed
+                    </button>
+
+                ` : ""}
+
+            </div>
 
         </div>
 
@@ -118,6 +143,7 @@ reports.forEach((report) => {
 
 
 }
+
 
 function getNextStatus(currentStatus) {
 
@@ -147,8 +173,16 @@ return currentStatus;
 
 async function updateStatus(reportId, currentStatus) {
 
-
 try {
+
+    const button =
+        event.target;
+
+    button.disabled = true;
+
+    button.innerText = "Updating...";
+
+    button.classList.add("loading-btn");
 
     const token = localStorage.getItem("token");
 
@@ -188,6 +222,50 @@ try {
 
 
 }
+
+
+async function markAsFailed(reportId) {
+
+
+try {
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+        `${BASE_URL}/api/volunteer/reports/${reportId}/status`,
+        {
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+                status: "FAILED"
+            })
+        }
+    );
+
+    if (!response.ok) {
+
+        throw new Error("Failed to mark report as FAILED");
+
+    }
+
+    await fetchAssignedReports();
+
+} catch (error) {
+
+    console.error(error);
+
+    alert("Failed to update report");
+
+}
+
+
+}
+
 
 
 fetchAssignedReports();
