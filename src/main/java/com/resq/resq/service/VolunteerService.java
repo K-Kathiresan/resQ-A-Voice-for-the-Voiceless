@@ -79,9 +79,52 @@ public class VolunteerService {
             );
         }
 
-        report.setStatus(status);
+        ReportStatus currentStatus = report.getStatus();
 
-        return reportRepository.save(report);
+                if (
+                        currentStatus == ReportStatus.RESCUED ||
+                        currentStatus == ReportStatus.FAILED
+                ) {
+                throw new RuntimeException(
+                        "Final status cannot be changed"
+                );
+                }
+
+                boolean validTransition = false;
+
+                if (
+                        currentStatus == ReportStatus.ASSIGNED &&
+                        status == ReportStatus.ON_THE_WAY
+                ) {
+                validTransition = true;
+                }
+
+                if (
+                        currentStatus == ReportStatus.ON_THE_WAY &&
+                        status == ReportStatus.RESCUING
+                ) {
+                validTransition = true;
+                }
+
+                if (
+                        currentStatus == ReportStatus.RESCUING &&
+                        (
+                                status == ReportStatus.RESCUED ||
+                                status == ReportStatus.FAILED
+                        )
+                ) {
+                validTransition = true;
+                }
+
+                if (!validTransition) {
+                throw new RuntimeException(
+                        "Invalid status transition"
+                );
+                }
+
+                report.setStatus(status);
+
+                return reportRepository.save(report);
     }
 
     private ReportResponseDTO mapToDTO(
@@ -118,8 +161,7 @@ public class VolunteerService {
         );
 
         dto.setImageUrl(
-                "http://127.0.0.1:8080/uploads/"
-                        + report.getImageUrl()
+                        report.getImageUrl()
         );
 
         if (report.getAssignedVolunteer() != null) {

@@ -38,9 +38,31 @@ public class AdminService {
         User volunteer = userRepository.findById(volunteerId)
                 .orElseThrow(() -> new RuntimeException("Volunteer not found"));
 
+        ReportStatus currentStatus = report.getStatus();
+
+        if (currentStatus == ReportStatus.RESCUED) {
+
+            throw new RuntimeException(
+                    "Completed rescue cannot be reassigned"
+            );
+        }
+
         report.setAssignedVolunteer(volunteer);
 
-        report.setStatus(ReportStatus.ASSIGNED);
+        /*
+         * Keep current status.
+         *
+         * Examples:
+         * PENDING    -> ASSIGNED
+         * ASSIGNED   -> ASSIGNED
+         * ON_THE_WAY -> ON_THE_WAY
+         * RESCUING   -> RESCUING
+         * FAILED     -> FAILED
+         */
+
+        if (currentStatus == ReportStatus.PENDING) {
+            report.setStatus(ReportStatus.ASSIGNED);
+        }
 
         return reportRepository.save(report);
     }
