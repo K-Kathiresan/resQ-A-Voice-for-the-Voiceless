@@ -90,10 +90,12 @@ function renderReports(reports) {
 
     reports.forEach(report => {
 
-        const isFinalState =
+        const isRescued =
+        report.status === "RESCUED";
 
-            report.status === "RESCUED" ||
-            report.status === "FAILED";
+        const isClosedCase =
+        report.status === "RESCUED" ||
+        report.status === "FAILED";
 
         const reportCard = document.createElement("div");
 
@@ -110,6 +112,10 @@ function renderReports(reports) {
             <div class="report-content">
 
                 <h3>${report.animalType}</h3>
+
+                <span class="case-badge">
+                ${isClosedCase ? "CLOSED CASE" : "ACTIVE CASE"}
+                </span>
 
                 <p>
                     ${report.description}
@@ -138,7 +144,7 @@ function renderReports(reports) {
 
                     <select
                         class="volunteer-select"
-                        ${isFinalState ? "disabled" : ""}
+                        ${isRescued ? "disabled" : ""}
                     >
 
                         <option value="">
@@ -164,9 +170,9 @@ function renderReports(reports) {
 
                     <button
                         onclick="assignVolunteer(${report.id}, this)"
-                        ${isFinalState ? "disabled" : ""}
+                        ${isRescued ? "disabled" : ""}
                     >
-                        ${isFinalState ? "Closed" : "Assign"}
+                        ${isRescued ? "Rescue Completed" : "Assign"}
                     </button>
 
                 </div>
