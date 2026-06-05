@@ -99,6 +99,15 @@ function renderReports(reports) {
 
         const reportCard = document.createElement("div");
 
+        const statusLabels = {
+            PENDING: "Pending Review",
+            ASSIGNED: "Volunteer Assigned",
+            ON_THE_WAY: "Volunteer En Route",
+            RESCUING: "Rescue In Progress",
+            RESCUED: "Rescue Successful",
+            FAILED: "Rescue Failed"
+        };
+
         reportCard.classList.add("report-card");
 
         reportCard.innerHTML = `
@@ -127,7 +136,9 @@ function renderReports(reports) {
                 </p>
 
                 <span class="status-badge ${report.status.toLowerCase()}">
-                    ${report.status}
+                    <span class="status-badge ${report.status.toLowerCase()}">
+                        ${statusLabels[report.status]}
+                    </span>
                 </span>
 
                 <p class="assigned-volunteer">
