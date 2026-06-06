@@ -107,6 +107,9 @@ reports.forEach((report) => {
                 <strong>Location:</strong>
                 ${report.location}
             </p>
+                <button onclick="openLocation('${report.location}')">
+                    Open Location
+                </button>
 
             <div class="status-badge ${statusClass}">
                 ${report.status}
@@ -265,7 +268,12 @@ try {
 
 
 }
+function openLocation(location) {
+    const mapsUrl =
+        `https://www.google.com/maps/dir/?api=1&destination=${location}`;
 
+    window.open(mapsUrl, "_blank");
+}
 
 
 fetchAssignedReports();
