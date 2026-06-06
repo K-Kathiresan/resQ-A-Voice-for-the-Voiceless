@@ -80,7 +80,36 @@ if (reports.length === 0) {
 
     return;
 }
+const assigned =
+    reports.filter(
+        r => r.status === "ASSIGNED"
+    ).length;
 
+const active =
+    reports.filter(
+        r =>
+            r.status === "ON_THE_WAY" ||
+            r.status === "RESCUING"
+    ).length;
+
+const completed =
+    reports.filter(
+        r =>
+            r.status === "RESCUED" ||
+            r.status === "FAILED"
+    ).length;
+
+document.getElementById(
+    "assignedCount"
+).innerText = assigned;
+
+document.getElementById(
+    "activeCount"
+).innerText = active;
+
+document.getElementById(
+    "completedCount"
+).innerText = completed;
 reports.forEach((report) => {
 
     const statusClass =

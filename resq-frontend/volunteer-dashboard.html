@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
 
+```
 <meta charset="UTF-8">
 
 <meta
@@ -13,46 +15,82 @@
 <title>Volunteer Dashboard</title>
 
 <link rel="stylesheet" href="css/style.css">
-
+```
 
 </head>
 
 <body>
 
-
 <nav>
 
-    <h2>resQ Volunteer Dashboard</h2>
+```
+<h2>resQ Volunteer Dashboard</h2>
 
-    <button id="logoutBtn">
-        Logout
-    </button>
+<button id="logoutBtn">
+    Logout
+</button>
+```
 
 </nav>
 
 <main>
 
-    <section>
+```
+<section class="hero-card">
 
-        <h1>Welcome Volunteer</h1>
+    <h1>
+        Volunteer Rescue Operations
+    </h1>
 
-        <p>
-            View and manage assigned rescue reports.
-        </p>
+    <p>
+        Manage assigned rescue cases,
+        navigate to rescue locations
+        and update rescue outcomes.
+    </p>
 
-    </section>
+</section>
 
-    <section>
+<div class="stats-grid">
 
-        <h2>Assigned Reports</h2>
+    <div class="stat-card">
 
-        <div id="assignedReportsContainer"></div>
+        <h2 id="assignedCount">0</h2>
 
-    </section>
+        <p>Assigned Cases</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2 id="activeCount">0</h2>
+
+        <p>Active Cases</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2 id="completedCount">0</h2>
+
+        <p>Completed Cases</p>
+
+    </div>
+
+</div>
+
+<section>
+
+    <h2>Assigned Reports</h2>
+
+    <div id="assignedReportsContainer"></div>
+
+</section>
+```
 
 </main>
 
 <script src="js/volunteer-dashboard.js"></script>
 
 </body>
+
 </html>
