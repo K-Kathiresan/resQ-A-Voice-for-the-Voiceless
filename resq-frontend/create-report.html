@@ -36,18 +36,53 @@
         ></textarea>
 
         <input
-                type="text"
-                id="location"
-                placeholder="Enter Location"
-                required
+        type="text"
+        id="location"
+        placeholder="Enter Location"
+        required
         >
 
-        <input
-                type="file"
-                id="img"
-                accept="image/*"
-                required
+        <button
+                type="button"
+                id="getLocationBtn"
         >
+            Use Current Location
+        </button>
+
+        <button
+            type="button"
+            id="openCameraBtn"
+        >
+            Open Camera
+        </button>
+
+        <video
+            id="cameraPreview"
+            autoplay
+            playsinline
+            style="display:none; width:100%; margin-top:10px;"
+        ></video>
+
+        <button
+            type="button"
+            id="captureBtn"
+            style="display:none;"
+        >
+            Capture Photo
+        </button>
+
+        <canvas
+            id="photoCanvas"
+            style="display:none;"
+        ></canvas>
+
+        <input
+            type="file"
+            id="img"
+            accept="image/*"
+            capture="environment"
+            required
+>
 
         <button type="submit">
             Submit Report
