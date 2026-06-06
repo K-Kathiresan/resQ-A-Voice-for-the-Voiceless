@@ -1,38 +1,50 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>resQ Login</title>
-
     <link rel="stylesheet" href="css/style.css">
-
 </head>
 
-<body>
+<body class="auth-body">
 
-<div class="container">
+<div class="auth-container">
 
-    <h1>Login</h1>
+
+<div class="auth-card">
+
+    <div class="brand-section">
+
+        <h1>resQ</h1>
+
+        <p class="tagline">
+            A Voice for the Voiceless
+        </p>
+
+        <p class="subtitle">
+            Report, Track and Rescue Animals in Need
+        </p>
+
+    </div>
 
     <form id="loginForm">
+
+        <h2>Welcome Back</h2>
 
         <input
                 type="email"
                 id="email"
-                placeholder="Enter Email"
+                placeholder="Email Address"
                 required
         >
 
         <input
                 type="password"
                 id="password"
-                placeholder="Enter Password"
+                placeholder="Password"
                 required
         >
 
@@ -40,7 +52,15 @@
             Login
         </button>
 
+        <p class="auth-link">
+            New here?
+            <a href="register.html">Create Account</a>
+        </p>
+
     </form>
+
+</div>
+
 
 </div>
 

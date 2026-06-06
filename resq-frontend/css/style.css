@@ -1,3 +1,146 @@
+:root {
+--primary: #1e3a5f;
+--secondary: #2d6a4f;
+--background: #f4f7fb;
+--card: #ffffff;
+--text: #1f2937;
+--border: #dbe4ee;
+}
+
+.auth-body {
+
+min-height: 100vh;
+
+display: flex;
+justify-content: center;
+align-items: center;
+
+background:
+    linear-gradient(
+        135deg,
+        #eef4f8,
+        #dce9f2
+    );
+
+padding: 20px;
+
+}
+
+.auth-container {
+width: 100%;
+max-width: 500px;
+}
+
+.auth-card {
+
+background: white;
+
+padding: 40px;
+
+border-radius: 20px;
+
+box-shadow:
+    0 15px 40px rgba(0,0,0,0.08);
+
+}
+
+.brand-section {
+
+text-align: center;
+
+margin-bottom: 30px;
+
+}
+
+.brand-section h1 {
+
+color: var(--primary);
+
+font-size: 42px;
+
+margin-bottom: 10px;
+
+}
+
+.tagline {
+
+font-weight: bold;
+
+color: var(--secondary);
+
+margin-bottom: 8px;
+
+}
+
+.subtitle {
+
+color: #6b7280;
+
+}
+
+.auth-card h2 {
+
+margin-bottom: 20px;
+
+color: var(--text);
+
+}
+
+.auth-card input,
+.auth-card select {
+
+width: 100%;
+
+padding: 14px;
+
+border: 1px solid var(--border);
+
+border-radius: 10px;
+
+margin-top: 12px;
+
+}
+
+.auth-card button {
+
+width: 100%;
+
+margin-top: 18px;
+
+padding: 14px;
+
+background: var(--primary);
+
+color: white;
+
+border: none;
+
+border-radius: 10px;
+
+font-weight: bold;
+
+transition: all 0.2s ease;
+
+}
+
+.auth-card button:hover {
+
+transform: translateY(-2px);
+
+opacity: 0.95;
+
+}
+
+.auth-link {
+
+text-align: center;
+
+margin-top: 18px;
+
+}
+
+
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
