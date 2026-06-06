@@ -8,6 +8,18 @@ const token = localStorage.getItem("token");
 
 let volunteers = [];
 
+
+let reportsData = [];
+
+const reportModal =
+    document.getElementById("reportModal");
+
+const modalBody =
+    document.getElementById("modalBody");
+
+const closeModal =
+    document.getElementById("closeModal");
+
 if (!token) {
 
     window.location.href = "login.html";
@@ -74,6 +86,8 @@ async function fetchReports() {
 
         const data = await response.json();
 
+        reportsData = data;
+
         console.log("Reports Response:", data);
 
         renderReports(data);
@@ -136,9 +150,7 @@ function renderReports(reports) {
                 </p>
 
                 <span class="status-badge ${report.status.toLowerCase()}">
-                    <span class="status-badge ${report.status.toLowerCase()}">
-                        ${statusLabels[report.status]}
-                    </span>
+                    ${statusLabels[report.status]}
                 </span>
 
                 <p class="assigned-volunteer">
@@ -186,6 +198,13 @@ function renderReports(reports) {
                         ${isRescued ? "Rescue Completed" : "Assign"}
                     </button>
 
+                    <button
+                        class="details-btn"
+                        onclick="openReportModal(${report.id})"
+                    >
+                        View Details
+                    </button>
+
                 </div>
 
             </div>
@@ -193,6 +212,48 @@ function renderReports(reports) {
 
         reportsContainer.appendChild(reportCard);
     });
+}
+
+function openReportModal(reportId) {
+
+    const report =
+        reportsData.find(r => r.id === reportId);
+
+    if (!report) {
+        return;
+    }
+
+    modalBody.innerHTML = `
+        <h2>${report.animalType}</h2>
+
+        <img
+            src="${report.imageUrl}"
+            alt="Animal"
+            style="width:100%; max-height:300px; object-fit:cover;"
+        >
+
+        <p>
+            <strong>Description:</strong>
+            ${report.description}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            ${report.location}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            ${report.status}
+        </p>
+
+        <p>
+            <strong>Assigned Volunteer:</strong>
+            ${report.assignedVolunteer?.name || "Not Assigned"}
+        </p>
+    `;
+
+    reportModal.style.display = "block";
 }
 
 async function assignVolunteer(reportId, buttonElement) {
@@ -252,5 +313,16 @@ async function init() {
 
     await fetchReports();
 }
+closeModal.addEventListener("click", () => {
 
+    reportModal.style.display = "none";
+});
+
+window.addEventListener("click", (event) => {
+
+    if (event.target === reportModal) {
+
+        reportModal.style.display = "none";
+    }
+});
 init();
