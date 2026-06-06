@@ -162,6 +162,17 @@ function renderReports(reports) {
                     </strong>
 
                 </p>
+                                ${report.rescueNote ? `
+
+                    <p class="rescue-note">
+
+                        <strong>Rescue Note:</strong>
+
+                        ${report.rescueNote}
+
+                    </p>
+
+                ` : ""}
 
                 <div class="assignment-section">
 
@@ -251,6 +262,14 @@ function openReportModal(reportId) {
             <strong>Assigned Volunteer:</strong>
             ${report.assignedVolunteer?.name || "Not Assigned"}
         </p>
+                ${report.rescueNote ? `
+
+        <p>
+            <strong>Rescue Note:</strong>
+            ${report.rescueNote}
+        </p>
+
+        ` : ""}
     `;
 
     reportModal.style.display = "block";

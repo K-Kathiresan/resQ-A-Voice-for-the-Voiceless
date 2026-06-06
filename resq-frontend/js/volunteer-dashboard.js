@@ -115,6 +115,27 @@ reports.forEach((report) => {
                 ${report.status}
             </div>
 
+            ${isCompleted ? `
+
+            <div class="rescue-note-section">
+
+                <h4>Rescue Note</h4>
+
+                <textarea
+                    id="note-${report.id}"
+                    placeholder="Enter rescue summary..."
+                >${report.rescueNote || ""}</textarea>
+
+                <button
+                    onclick="saveRescueNote(${report.id})"
+                >
+                    Save Note
+                </button>
+
+            </div>
+
+        ` : ""}
+
             <div class="button-group">
 
                 <button
@@ -267,6 +288,52 @@ try {
 }
 
 
+}
+async function saveRescueNote(reportId) {
+
+    try {
+
+        const token =
+            localStorage.getItem("token");
+
+        const rescueNote =
+            document.getElementById(
+                `note-${reportId}`
+            ).value;
+
+        const response = await fetch(
+            `${BASE_URL}/api/volunteer/reports/${reportId}/note`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+
+                body: JSON.stringify({
+                    rescueNote: rescueNote
+                })
+            }
+        );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to save rescue note"
+            );
+        }
+
+        alert("Rescue note saved successfully");
+
+        await fetchAssignedReports();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to save rescue note");
+    }
 }
 function openLocation(location) {
     const mapsUrl =

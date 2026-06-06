@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.resq.resq.dto.SaveRescueNoteRequest;
+
 import java.util.List;
 
 @RestController
@@ -39,6 +41,22 @@ public Report updateStatus(
     return volunteerService.updateReportStatus(
             id,
             request.getStatus(),
+            email
+    );
+}
+
+@PutMapping("/reports/{id}/note")
+public Report saveRescueNote(
+        @PathVariable Long id,
+        @RequestBody SaveRescueNoteRequest request,
+        Authentication authentication
+) {
+
+    String email = authentication.getName();
+
+    return volunteerService.saveRescueNote(
+            id,
+            request.getRescueNote(),
             email
     );
 }

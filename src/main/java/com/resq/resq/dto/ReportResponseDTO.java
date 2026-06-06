@@ -20,6 +20,8 @@ public class ReportResponseDTO {
 
     private String assignedVolunteerName;
 
+    private String rescueNote;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -122,5 +124,16 @@ public class ReportResponseDTO {
     ) {
 
         this.updatedAt = updatedAt;
+    }
+    public String getRescueNote() {
+
+    return rescueNote;
+    }
+    public void setRescueNote(
+            String rescueNote
+    ) {
+
+        this.rescueNote =
+                rescueNote;
     }
 }

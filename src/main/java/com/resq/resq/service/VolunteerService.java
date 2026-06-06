@@ -127,6 +127,56 @@ public class VolunteerService {
                 return reportRepository.save(report);
     }
 
+    public Report saveRescueNote(
+        Long reportId,
+        String rescueNote,
+        String email
+) {
+
+                User volunteer =
+                        userRepository.findByEmail(email)
+                                .orElseThrow(() ->
+                                        new RuntimeException(
+                                                "Volunteer not found"
+                                        )
+                                );
+
+                Report report =
+                        reportRepository.findById(reportId)
+                                .orElseThrow(() ->
+                                        new RuntimeException(
+                                                "Report not found"
+                                        )
+                                );
+
+                if (
+                        report.getAssignedVolunteer() == null ||
+
+                        !report.getAssignedVolunteer()
+                                .getId()
+                                .equals(volunteer.getId())
+                ) {
+
+                        throw new RuntimeException(
+                                "You are not assigned to this report"
+                        );
+                }
+
+                if (
+                        report.getStatus() != ReportStatus.RESCUED &&
+                        report.getStatus() != ReportStatus.FAILED
+                ) {
+
+                        throw new RuntimeException(
+                                "Rescue note can only be added after completion"
+                        );
+                }
+
+                report.setRescueNote(rescueNote);
+
+                return reportRepository.save(report);
+                }
+
     private ReportResponseDTO mapToDTO(
             Report report
     ) {
@@ -162,6 +212,9 @@ public class VolunteerService {
 
         dto.setImageUrl(
                         report.getImageUrl()
+        );
+        dto.setRescueNote(
+                        report.getRescueNote()
         );
 
         if (report.getAssignedVolunteer() != null) {

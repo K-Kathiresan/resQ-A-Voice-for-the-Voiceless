@@ -217,8 +217,17 @@ public class ReportService {
         dto.setLocation(report.getLocation());
         dto.setStatus(report.getStatus());
         dto.setImageUrl(report.getImageUrl());
+        dto.setRescueNote(
+        report.getRescueNote()
+        );
         dto.setCreatedAt(report.getCreatedAt());
         dto.setUpdatedAt(report.getUpdatedAt());
+        if (report.getVolunteer() != null) {
+                dto.setAssignedVolunteerName(
+                        report.getVolunteer().getName()
+                );
+        }
+
 
         return dto;
     }

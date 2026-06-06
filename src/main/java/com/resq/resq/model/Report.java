@@ -63,6 +63,8 @@ public class Report {
     @JoinColumn(name = "assigned_volunteer_id")
     private User assignedVolunteer;
 
+    private String rescueNote;
+
     public Report() {
     }
 
@@ -149,5 +151,12 @@ public class Report {
 
     public void setAssignedVolunteer(User assignedVolunteer) {
         this.assignedVolunteer = assignedVolunteer;
+    }
+
+    public String getRescueNote() {
+        return rescueNote;
+    }
+    public void setRescueNote(String rescueNote) {
+        this.rescueNote = rescueNote;
     }
 }

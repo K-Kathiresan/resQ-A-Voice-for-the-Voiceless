@@ -63,6 +63,14 @@ async function loadMyReports() {
                     <strong>Status:</strong>
                     ${report.status}
                 </p>
+                                ${report.rescueNote ? `
+
+                <p>
+                    <strong>Rescue Outcome:</strong>
+                    ${report.rescueNote}
+                </p>
+
+                ` : ""}
             `;
 
             reportsContainer.appendChild(reportCard);
