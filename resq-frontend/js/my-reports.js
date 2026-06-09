@@ -1,10 +1,20 @@
 const reportsContainer = document.getElementById("reportsContainer");
 
+const totalReports = document.getElementById("totalReports");
+const pendingReports = document.getElementById("pendingReports");
+const rescuedReports = document.getElementById("rescuedReports");
+const failedReports = document.getElementById("failedReports");
+
 const token = localStorage.getItem("token");
 
 if (!token) {
     alert("Please login first");
     window.location.href = "login.html";
+}
+
+function getStatusClass(status) {
+
+    return `status-${status.toLowerCase()}`;
 }
 
 async function loadMyReports() {
@@ -23,11 +33,20 @@ async function loadMyReports() {
 
         const result = await response.json();
 
-        console.log(result);
-
-        const reports = result.data;
+        const reports = result.data || [];
 
         reportsContainer.innerHTML = "";
+
+        totalReports.textContent = reports.length;
+
+        pendingReports.textContent =
+            reports.filter(r => r.status === "PENDING").length;
+
+        rescuedReports.textContent =
+            reports.filter(r => r.status === "RESCUED").length;
+
+        failedReports.textContent =
+            reports.filter(r => r.status === "FAILED").length;
 
         reports.forEach(report => {
 
@@ -35,42 +54,49 @@ async function loadMyReports() {
 
             reportCard.classList.add("report-card");
 
-            // USE DATABASE URL DIRECTLY
-            const imageUrl = report.imageUrl;
-
-            console.log(imageUrl);
-
             reportCard.innerHTML = `
+
                 <img
-                    src="${imageUrl}"
+                    src="${report.imageUrl}"
                     alt="Animal Image"
-                    width="300"
+                    class="report-image"
                 >
 
-                <h2>${report.animalType}</h2>
+                <div class="report-content">
 
-                <p>
-                    <strong>Description:</strong>
-                    ${report.description}
-                </p>
+                    <h2>${report.animalType}</h2>
 
-                <p>
-                    <strong>Location:</strong>
-                    ${report.location}
-                </p>
+                    <span class="status-badge ${getStatusClass(report.status)}">
+                        ${report.status.replaceAll("_", " ")}
+                    </span>
 
-                <p>
-                    <strong>Status:</strong>
-                    ${report.status}
-                </p>
-                                ${report.rescueNote ? `
+                    <p>
+                        <strong>Description:</strong>
+                        ${report.description}
+                    </p>
 
-                <p>
-                    <strong>Rescue Outcome:</strong>
-                    ${report.rescueNote}
-                </p>
+                    <p>
+                        <strong>Location:</strong>
+                        ${report.location}
+                    </p>
 
-                ` : ""}
+                    ${
+                        report.rescueNote
+                        ?
+                        `
+                        <div class="outcome-card">
+
+                            <h3>Rescue Outcome</h3>
+
+                            <p>${report.rescueNote}</p>
+
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                </div>
             `;
 
             reportsContainer.appendChild(reportCard);
@@ -78,7 +104,7 @@ async function loadMyReports() {
 
     } catch (error) {
 
-        console.error("Error loading reports:", error);
+        console.error(error);
 
         reportsContainer.innerHTML =
             "<p>Failed to load reports</p>";
