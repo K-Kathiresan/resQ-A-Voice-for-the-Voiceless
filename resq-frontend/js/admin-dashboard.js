@@ -6,6 +6,18 @@ const BASE_URL = "http://localhost:8080";
 
 const token = localStorage.getItem("token");
 
+const pendingCount =
+    document.getElementById("pendingCount");
+
+const assignedCount =
+    document.getElementById("assignedCount");
+
+const rescuedCount =
+    document.getElementById("rescuedCount");
+
+const failedCount =
+    document.getElementById("failedCount");
+
 let volunteers = [];
 
 
@@ -87,6 +99,21 @@ async function fetchReports() {
         const data = await response.json();
 
         reportsData = data;
+        pendingCount.textContent =
+        data.filter(r => r.status === "PENDING").length;
+
+    assignedCount.textContent =
+        data.filter(r =>
+            r.status === "ASSIGNED" ||
+            r.status === "ON_THE_WAY" ||
+            r.status === "RESCUING"
+        ).length;
+
+    rescuedCount.textContent =
+        data.filter(r => r.status === "RESCUED").length;
+
+    failedCount.textContent =
+        data.filter(r => r.status === "FAILED").length;
 
         console.log("Reports Response:", data);
 
