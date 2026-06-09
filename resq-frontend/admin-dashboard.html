@@ -12,10 +12,14 @@
     <header class="navbar">
         <h1>resQ Admin Dashboard</h1>
 
-        <button id="logoutBtn">Logout</button>
+        <button id="logoutBtn">
+            Logout
+        </button>
     </header>
 
     <main class="container">
+
+        <!-- Hero Section -->
 
         <div class="hero-card">
 
@@ -28,53 +32,106 @@
 
         </div>
 
+        <!-- Statistics Cards -->
+
         <div class="stats-grid">
 
             <div class="stat-card">
+
                 <h2 id="pendingCount">0</h2>
+
                 <p>Pending</p>
+
             </div>
 
             <div class="stat-card">
+
                 <h2 id="assignedCount">0</h2>
+
                 <p>Assigned</p>
+
             </div>
 
             <div class="stat-card">
+
                 <h2 id="rescuedCount">0</h2>
+
                 <p>Rescued</p>
+
             </div>
 
             <div class="stat-card">
+
                 <h2 id="failedCount">0</h2>
+
                 <p>Failed</p>
+
             </div>
 
         </div>
 
+        <!-- Reports Section -->
+
         <section class="reports-section">
+
             <h2>All Rescue Reports</h2>
 
-            <div id="reportsContainer" class="reports-container">
+            <div class="filters-section">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search animal type..."
+                >
+
+                <select id="statusFilter">
+
+                    <option value="ALL">All Status</option>
+
+                    <option value="PENDING">Pending</option>
+
+                    <option value="ASSIGNED">Assigned</option>
+
+                    <option value="ON_THE_WAY">On The Way</option>
+
+                    <option value="RESCUING">Rescuing</option>
+
+                    <option value="RESCUED">Rescued</option>
+
+                    <option value="FAILED">Failed</option>
+
+                </select>
+
+            </div>
+
+            <div
+                id="reportsContainer"
+                class="reports-container"
+            >
             </div>
 
         </section>
 
     </main>
 
+    <!-- Report Details Modal -->
 
     <div id="reportModal" class="modal">
 
-    <div class="modal-content">
+        <div class="modal-content">
 
-        <span id="closeModal">&times;</span>
+            <span id="closeModal">
+                &times;
+            </span>
 
-        <div id="modalBody"></div>
+            <div id="modalBody">
+            </div>
+
+        </div>
 
     </div>
 
-</div>
+    <script src="./js/admin-dashboard.js"></script>
 
-<script src="./js/admin-dashboard.js"></script>
 </body>
 </html>

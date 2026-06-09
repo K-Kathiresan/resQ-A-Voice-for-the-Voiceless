@@ -17,6 +17,11 @@ const rescuedCount =
 
 const failedCount =
     document.getElementById("failedCount");
+const searchInput =
+    document.getElementById("searchInput");
+
+const statusFilter =
+    document.getElementById("statusFilter");
 
 let volunteers = [];
 
@@ -251,7 +256,32 @@ function renderReports(reports) {
         reportsContainer.appendChild(reportCard);
     });
 }
+function applyFilters() {
 
+    const searchValue =
+        searchInput.value.toLowerCase();
+
+    const selectedStatus =
+        statusFilter.value;
+
+    const filteredReports =
+        reportsData.filter(report => {
+
+            const animalMatch =
+                report.animalType
+                .toLowerCase()
+                .includes(searchValue);
+
+            const statusMatch =
+                selectedStatus === "ALL"
+                ||
+                report.status === selectedStatus;
+
+            return animalMatch && statusMatch;
+        });
+
+    renderReports(filteredReports);
+}
 function openReportModal(reportId) {
 
     const report =
@@ -358,6 +388,16 @@ async function init() {
     await fetchVolunteers();
 
     await fetchReports();
+
+    searchInput.addEventListener(
+    "input",
+    applyFilters
+    );
+
+    statusFilter.addEventListener(
+        "change",
+        applyFilters
+    );
 }
 closeModal.addEventListener("click", () => {
 
