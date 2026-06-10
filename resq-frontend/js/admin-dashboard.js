@@ -181,6 +181,13 @@ function renderReports(reports) {
                     ${report.location}
                 </p>
 
+                <button
+                    class="map-btn"
+                    onclick="openMap('${report.location}')"
+                >
+                    Open Map
+                </button>
+
                 <span class="status-badge ${report.status.toLowerCase()}">
                     ${statusLabels[report.status]}
                 </span>
@@ -411,4 +418,11 @@ window.addEventListener("click", (event) => {
         reportModal.style.display = "none";
     }
 });
+function openMap(location) {
+
+    const url =
+        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+
+    window.open(url, "_blank");
+}
 init();

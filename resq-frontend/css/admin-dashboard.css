@@ -365,3 +365,26 @@ body {
 
     font-size: 15px;
 }
+.map-btn {
+
+    background-color: #16a34a;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    margin-bottom: 15px;
+
+    font-weight: bold;
+}
+
+.map-btn:hover {
+
+    opacity: 0.9;
+}
