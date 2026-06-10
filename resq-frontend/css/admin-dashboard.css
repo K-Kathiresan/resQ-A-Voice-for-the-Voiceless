@@ -388,3 +388,25 @@ body {
 
     opacity: 0.9;
 }
+
+.stat-card p {
+    margin-top: 8px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+#successRate {
+    color: #16a34a;
+}
+
+#activeCases {
+    color: #2563eb;
+}
+
+#closedCases {
+    color: #dc2626;
+}
+
+#totalReports {
+    color: #1e3a5f;
+}

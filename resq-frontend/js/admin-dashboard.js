@@ -6,22 +6,17 @@ const BASE_URL = "http://localhost:8080";
 
 const token = localStorage.getItem("token");
 
-const pendingCount =
-    document.getElementById("pendingCount");
+const totalReports =
+    document.getElementById("totalReports");
 
-const assignedCount =
-    document.getElementById("assignedCount");
+const activeCases =
+    document.getElementById("activeCases");
 
-const rescuedCount =
-    document.getElementById("rescuedCount");
+const closedCases =
+    document.getElementById("closedCases");
 
-const failedCount =
-    document.getElementById("failedCount");
-const searchInput =
-    document.getElementById("searchInput");
-
-const statusFilter =
-    document.getElementById("statusFilter");
+const successRate =
+    document.getElementById("successRate");
 
 let volunteers = [];
 
@@ -104,21 +99,47 @@ async function fetchReports() {
         const data = await response.json();
 
         reportsData = data;
-        pendingCount.textContent =
-        data.filter(r => r.status === "PENDING").length;
+        const total =
+    data.length;
 
-    assignedCount.textContent =
-        data.filter(r =>
-            r.status === "ASSIGNED" ||
-            r.status === "ON_THE_WAY" ||
-            r.status === "RESCUING"
-        ).length;
+const active =
+    data.filter(r =>
+        r.status === "PENDING" ||
+        r.status === "ASSIGNED" ||
+        r.status === "ON_THE_WAY" ||
+        r.status === "RESCUING"
+    ).length;
 
-    rescuedCount.textContent =
-        data.filter(r => r.status === "RESCUED").length;
+const closed =
+    data.filter(r =>
+        r.status === "RESCUED" ||
+        r.status === "FAILED"
+    ).length;
 
-    failedCount.textContent =
-        data.filter(r => r.status === "FAILED").length;
+const rescued =
+    data.filter(r =>
+        r.status === "RESCUED"
+    ).length;
+
+const failed =
+    data.filter(r =>
+        r.status === "FAILED"
+    ).length;
+
+const rate =
+    (rescued + failed) === 0
+        ? 0
+        : Math.round(
+            (rescued / (rescued + failed)) * 100
+        );
+
+totalReports.textContent = total;
+
+activeCases.textContent = active;
+
+closedCases.textContent = closed;
+
+successRate.textContent = `${rate}%`;
 
         console.log("Reports Response:", data);
 
