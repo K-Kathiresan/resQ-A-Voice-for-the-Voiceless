@@ -6,7 +6,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #0f172a;
+    color: #f8fafc;
 }
 
 .navbar {
@@ -59,7 +60,7 @@ body {
 }
 
 .report-card {
-    background-color: white;
+    background: #1e293b;
 
     border-radius: 12px;
 
@@ -192,7 +193,7 @@ body {
 }
 
 .modal-content {
-    background-color: white;
+    background: #1e293b;
 
     width: 80%;
     max-width: 800px;
@@ -273,7 +274,7 @@ body {
 }
 .rescue-note {
 
-    background: #eef9f1;
+    background: #089b43;
 
     border-left: 5px solid green;
 
@@ -285,7 +286,7 @@ body {
 }
 .hero-card {
 
-    background: white;
+    background: #1e293b;
 
     padding: 30px;
 
@@ -323,7 +324,7 @@ body {
 
 .stat-card {
 
-    background: white;
+    background: #1e293b;
 
     padding: 25px;
 
@@ -367,7 +368,7 @@ body {
 }
 .map-btn {
 
-    background-color: #16a34a;
+    background-color:  navy;
 
     color: white;
 
@@ -409,4 +410,17 @@ body {
 
 #totalReports {
     color: #1e3a5f;
+}
+
+.hero-card h1,
+.report-content h3,
+.reports-section h2,
+.modal-content h2 {
+    color: #f8fafc;
+}
+
+.hero-card p,
+.report-content p,
+.modal-content p {
+    color: #cbd5e1;
 }
