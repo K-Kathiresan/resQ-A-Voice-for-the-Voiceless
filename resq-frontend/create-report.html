@@ -1,20 +1,22 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
+<meta charset="UTF-8">
 
-    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<title>Create Report</title>
 
-    <title>Create Report</title>
+<link rel="stylesheet" href="css/create-report.css">
 
-    <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
+
 
 <div class="container">
 
@@ -23,28 +25,28 @@
     <form id="reportForm">
 
         <input
-                type="text"
-                id="animalType"
-                placeholder="Enter Animal Type"
-                required
+            type="text"
+            id="animalType"
+            placeholder="Enter Animal Type"
+            required
         >
 
         <textarea
-                id="description"
-                placeholder="Describe Animal Condition"
-                required
+            id="description"
+            placeholder="Describe Animal Condition"
+            required
         ></textarea>
 
         <input
-        type="text"
-        id="location"
-        placeholder="Enter Location"
-        required
+            type="text"
+            id="location"
+            placeholder="Enter Location"
+            required
         >
 
         <button
-                type="button"
-                id="getLocationBtn"
+            type="button"
+            id="getLocationBtn"
         >
             Use Current Location
         </button>
@@ -82,7 +84,7 @@
             accept="image/*"
             capture="environment"
             required
->
+        >
 
         <button type="submit">
             Submit Report
@@ -93,7 +95,6 @@
 </div>
 
 <script src="js/api.js"></script>
-
 <script src="js/create-report.js"></script>
 
 </body>
