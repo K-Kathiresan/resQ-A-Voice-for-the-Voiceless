@@ -4,7 +4,7 @@
 
 <head>
 
-```
+
 <meta charset="UTF-8">
 
 <meta
@@ -14,8 +14,7 @@
 
 <title>Volunteer Dashboard</title>
 
-<link rel="stylesheet" href="css/style.css">
-```
+<link rel="stylesheet" href="css/volunteer-dashboard.css">
 
 </head>
 
@@ -23,73 +22,70 @@
 
 <nav>
 
-```
-<h2>resQ Volunteer Dashboard</h2>
+    <h2>resQ Volunteer Dashboard</h2>
 
-<button id="logoutBtn">
-    Logout
-</button>
-```
+    <button id="logoutBtn">
+        Logout
+    </button>
 
 </nav>
 
 <main>
 
-```
-<section class="hero-card">
+    <section class="hero-card">
 
-    <h1>
-        Volunteer Rescue Operations
-    </h1>
+        <h1>
+            Volunteer Rescue Operations
+        </h1>
 
-    <p>
-        Manage assigned rescue cases,
-        navigate to rescue locations
-        and update rescue outcomes.
-    </p>
+        <p>
+            Manage assigned rescue cases,
+            navigate to rescue locations
+            and update rescue outcomes.
+        </p>
 
-</section>
+    </section>
 
-<div class="stats-grid">
+    <div class="stats-grid">
 
-    <div class="stat-card">
+        <div class="stat-card">
 
-        <h2 id="assignedCount">0</h2>
+            <h2 id="assignedCount">0</h2>
 
-        <p>Assigned Cases</p>
+            <p>Assigned Cases</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2 id="activeCount">0</h2>
+
+            <p>Active Cases</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2 id="completedCount">0</h2>
+
+            <p>Completed Cases</p>
+
+        </div>
 
     </div>
 
-    <div class="stat-card">
+    <section>
 
-        <h2 id="activeCount">0</h2>
+        <h2>Assigned Reports</h2>
 
-        <p>Active Cases</p>
+        <div id="assignedReportsContainer"></div>
 
-    </div>
-
-    <div class="stat-card">
-
-        <h2 id="completedCount">0</h2>
-
-        <p>Completed Cases</p>
-
-    </div>
-
-</div>
-
-<section>
-
-    <h2>Assigned Reports</h2>
-
-    <div id="assignedReportsContainer"></div>
-
-</section>
-```
+    </section>
 
 </main>
 
 <script src="js/volunteer-dashboard.js"></script>
+
 
 </body>
 

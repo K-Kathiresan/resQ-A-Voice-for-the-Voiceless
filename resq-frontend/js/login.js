@@ -35,7 +35,7 @@ loginForm.addEventListener("submit", async function (event) {
 
         if (role === "CITIZEN") {
 
-            window.location.href = "dashboard.html";
+            window.location.href = "my-reports.html";
 
         } else if (role === "VOLUNTEER") {
 

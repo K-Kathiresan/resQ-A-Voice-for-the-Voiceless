@@ -1,54 +1,120 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>resQ Dashboard</title>
+<title>Citizen Dashboard</title>
+
+<link rel="stylesheet" href="css/citizen-dashboard.css">
 
 </head>
 
 <body>
 
-    <h1>Welcome to resQ Dashboard</h1>
+<nav>
 
-    <a href="create-report.html">
-    Create Report
+
+<h2>resQ Citizen Dashboard</h2>
+
+<button id="logoutBtn">
+    Logout
+</button>
+
+</nav>
+
+<main>
+
+
+<section class="hero-card">
+
+    <h1>
+        Welcome to resQ
+    </h1>
+
+    <p>
+        Report injured animals, track rescue progress,
+        and stay updated on rescue operations.
+    </p>
+
+</section>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <h2 id="totalReports">0</h2>
+
+        <p>Total Reports</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2 id="activeReports">0</h2>
+
+        <p>Active Cases</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2 id="completedReports">0</h2>
+
+        <p>Completed Cases</p>
+
+    </div>
+
+</div>
+
+<section class="action-section">
+
+    <a
+        href="create-report.html"
+        class="action-btn"
+    >
+        Create Report
     </a>
 
-    <a href="my-reports.html">My Reports</a>
+    <a
+        href="my-reports.html"
+        class="action-btn"
+    >
+        View My Reports
+    </a>
 
-    <button id="logoutBtn">
-        Logout
-    </button>
+</section>
 
-    <script>
+</main>
 
-        const token = localStorage.getItem("token");
+<script>
 
-        if (!token) {
+    const token = localStorage.getItem("token");
 
-            alert("Please login first");
+    if (!token) {
+
+        alert("Please login first");
+
+        window.location.href = "login.html";
+    }
+
+    document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function () {
+
+            localStorage.removeItem("token");
+
+            alert("Logged out successfully");
 
             window.location.href = "login.html";
-        }
+        });
 
-        document
-            .getElementById("logoutBtn")
-            .addEventListener("click", function () {
-
-                localStorage.removeItem("token");
-
-                alert("Logged out successfully");
-
-                window.location.href = "login.html";
-            });
-
-    </script>
+</script>
 
 </body>
 

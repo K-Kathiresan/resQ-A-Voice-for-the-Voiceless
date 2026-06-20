@@ -1,54 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Reports - resQ</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Citizen Dashboard - resQ</title>
+
+<link rel="stylesheet" href="css/citizen-dashboard.css">
+
+
 </head>
+
 <body>
 
-    <div class="dashboard-container">
+<nav>
 
-        <div class="hero-card">
-            <h1>My Rescue Reports</h1>
-            <p>
-                Track every animal rescue report you've submitted and
-                follow its rescue journey in real time.
-            </p>
-        </div>
 
-        <div class="stats-grid">
+<h2>resQ Citizen Dashboard</h2>
 
-            <div class="stat-card">
-                <h2 id="totalReports">0</h2>
-                <p>Total Reports</p>
-            </div>
+<button id="logoutBtn">
+    Logout
+</button>
 
-            <div class="stat-card">
-                <h2 id="pendingReports">0</h2>
-                <p>Pending</p>
-            </div>
 
-            <div class="stat-card">
-                <h2 id="rescuedReports">0</h2>
-                <p>Rescued</p>
-            </div>
+</nav>
 
-            <div class="stat-card">
-                <h2 id="failedReports">0</h2>
-                <p>Failed</p>
-            </div>
+<main class="dashboard-container">
 
-        </div>
 
-        <div id="reportsContainer"></div>
+<div class="hero-card">
+
+    <h1>My Rescue Reports</h1>
+
+    <p>
+        Track every animal rescue report you've submitted and
+        follow its rescue journey in real time.
+    </p>
+
+</div>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <h2 id="totalReports">0</h2>
+
+        <p>Total Reports</p>
 
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/my-reports.js"></script>
+    <div class="stat-card">
+
+        <h2 id="pendingReports">0</h2>
+
+        <p>Pending</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2 id="rescuedReports">0</h2>
+
+        <p>Rescued</p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h2 id="failedReports">0</h2>
+
+        <p>Failed</p>
+
+    </div>
+
+</div>
+
+<div class="action-section">
+
+    <a
+        href="create-report.html"
+        class="action-btn"
+    >
+        Create Report
+    </a>
+
+</div>
+
+<div id="reportsContainer"></div>
+
+
+</main>
+
+<script src="js/api.js"></script>
+
+<script src="js/my-reports.js"></script>
+
+<script>
+
+if (!token) {
+    window.location.href = "login.html";
+}
+
+document.getElementById("logoutBtn")
+.addEventListener("click", () => {
+
+    localStorage.clear();
+
+    window.location.href = "login.html";
+});
+
+</script>
 
 </body>
+
 </html>
