@@ -20,7 +20,6 @@ const successRate =
 
 let volunteers = [];
 
-
 let reportsData = [];
 
 const reportModal =
@@ -33,26 +32,20 @@ const closeModal =
     document.getElementById("closeModal");
 
 if (!token) {
-
     window.location.href = "login.html";
 }
 
 logoutBtn.addEventListener("click", () => {
-
     localStorage.removeItem("token");
-
     window.location.href = "login.html";
 });
 
 async function fetchVolunteers() {
-
     try {
-
         const response = await fetch(
             `${BASE_URL}/api/admin/volunteers`,
             {
                 method: "GET",
-
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -60,31 +53,24 @@ async function fetchVolunteers() {
         );
 
         if (!response.ok) {
-
             throw new Error(`HTTP Error: ${response.status}`);
         }
 
         const data = await response.json();
-
         console.log("Volunteer Response:", data);
-
         volunteers = data;
 
     } catch (error) {
-
         console.error("Error fetching volunteers:", error);
     }
 }
 
 async function fetchReports() {
-
     try {
-
         const response = await fetch(
             `${BASE_URL}/api/admin/reports`,
             {
                 method: "GET",
-
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -92,93 +78,90 @@ async function fetchReports() {
         );
 
         if (!response.ok) {
-
             throw new Error(`HTTP Error: ${response.status}`);
         }
 
         const data = await response.json();
-
         reportsData = data;
-        const total =
-    data.length;
 
-const active =
-    data.filter(r =>
-        r.status === "PENDING" ||
-        r.status === "ASSIGNED" ||
-        r.status === "ON_THE_WAY" ||
-        r.status === "RESCUING"
-    ).length;
+        const total = data.length;
 
-const closed =
-    data.filter(r =>
-        r.status === "RESCUED" ||
-        r.status === "FAILED"
-    ).length;
+        const active =
+            data.filter(r =>
+                r.status === "PENDING" ||
+                r.status === "ASSIGNED" ||
+                r.status === "ON_THE_WAY" ||
+                r.status === "RESCUING"
+            ).length;
 
-const rescued =
-    data.filter(r =>
-        r.status === "RESCUED"
-    ).length;
+        const closed =
+            data.filter(r =>
+                r.status === "RESCUED" ||
+                r.status === "FAILED"
+            ).length;
 
-const failed =
-    data.filter(r =>
-        r.status === "FAILED"
-    ).length;
+        const rescued =
+            data.filter(r =>
+                r.status === "RESCUED"
+            ).length;
 
-const rate =
-    (rescued + failed) === 0
-        ? 0
-        : Math.round(
-            (rescued / (rescued + failed)) * 100
-        );
+        const failed =
+            data.filter(r =>
+                r.status === "FAILED"
+            ).length;
 
-totalReports.textContent = total;
+        const rate =
+            (rescued + failed) === 0
+                ? 0
+                : Math.round((rescued / (rescued + failed)) * 100);
 
-activeCases.textContent = active;
-
-closedCases.textContent = closed;
-
-successRate.textContent = `${rate}%`;
+        totalReports.textContent = total;
+        activeCases.textContent = active;
+        closedCases.textContent = closed;
+        successRate.textContent = `${rate}%`;
 
         console.log("Reports Response:", data);
-
         renderReports(data);
 
     } catch (error) {
-
         console.error("Error fetching reports:", error);
     }
 }
 
-function renderReports(reports) {
+function updateReportsCountBadge(count) {
+    const badge = document.getElementById("reportsCountBadge");
+    if (badge) {
+        badge.textContent = `${count} report${count !== 1 ? "s" : ""}`;
+    }
+}
 
+function renderReports(reports) {
     reportsContainer.innerHTML = "";
+    updateReportsCountBadge(reports.length);
 
     reports.forEach(report => {
 
         const isRescued =
-        report.status === "RESCUED";
+            report.status === "RESCUED";
 
         const isClosedCase =
-        report.status === "RESCUED" ||
-        report.status === "FAILED";
+            report.status === "RESCUED" ||
+            report.status === "FAILED";
 
         const reportCard = document.createElement("div");
 
         const statusLabels = {
-            PENDING: "Pending Review",
-            ASSIGNED: "Volunteer Assigned",
+            PENDING:    "Pending Review",
+            ASSIGNED:   "Volunteer Assigned",
             ON_THE_WAY: "Volunteer En Route",
-            RESCUING: "Rescue In Progress",
-            RESCUED: "Rescue Successful",
-            FAILED: "Rescue Failed"
+            RESCUING:   "Rescue In Progress",
+            RESCUED:    "Rescue Successful",
+            FAILED:     "Rescue Failed"
         };
 
         reportCard.classList.add("report-card");
 
         reportCard.innerHTML = `
-        
             <img
                 src="${report.imageUrl}"
                 alt="Animal"
@@ -187,51 +170,54 @@ function renderReports(reports) {
 
             <div class="report-content">
 
-                <h3>${report.animalType}</h3>
-
-                <span class="case-badge">
-                ${isClosedCase ? "CLOSED CASE" : "ACTIVE CASE"}
-                </span>
-
-                <p>
-                    ${report.description}
-                </p>
-
-                <p>
-                    <strong>Location:</strong>
-                    ${report.location}
-                </p>
-
-                <button
-                    class="map-btn"
-                    onclick="openMap('${report.location}')"
-                >
-                    Open Map
-                </button>
+                <div class="report-header">
+                    <h3>${report.animalType}</h3>
+                    <span class="case-badge ${isClosedCase ? "closed-case" : "active-case"}">
+                        ${isClosedCase ? "Closed Case" : "Active Case"}
+                    </span>
+                </div>
 
                 <span class="status-badge ${report.status.toLowerCase()}">
                     ${statusLabels[report.status]}
                 </span>
 
-                <p class="assigned-volunteer">
-
-                    Assigned Volunteer:
-
-                    <strong>
-                        ${report.assignedVolunteer?.name || "Not Assigned"}
-                    </strong>
-
+                <p class="report-description">
+                    ${report.description}
                 </p>
-                                ${report.rescueNote ? `
 
-                    <p class="rescue-note">
+                <div class="report-location">
+                    <svg class="location-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span>${report.location}</span>
+                </div>
 
-                        <strong>Rescue Note:</strong>
+                <div class="action-row">
+                    <button
+                        class="map-btn"
+                        onclick="openMap('${report.location}')"
+                    >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                        </svg>
+                        Open Map
+                    </button>
+                </div>
 
+                <div class="assigned-volunteer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Assigned Volunteer: <strong>${report.assignedVolunteer?.name || "Not Assigned"}</strong></span>
+                </div>
+
+                ${report.rescueNote ? `
+                    <div class="rescue-note">
+                        <strong>Rescue Note</strong>
                         ${report.rescueNote}
-
-                    </p>
-
+                    </div>
                 ` : ""}
 
                 <div class="assignment-section">
@@ -240,26 +226,15 @@ function renderReports(reports) {
                         class="volunteer-select"
                         ${isRescued ? "disabled" : ""}
                     >
-
-                        <option value="">
-                            Select Volunteer
-                        </option>
-
+                        <option value="">Select Volunteer</option>
                         ${(volunteers || []).map(volunteer => `
-
                             <option
                                 value="${volunteer.id}"
-                                ${report.assignedVolunteer?.id === volunteer.id
-                                    ? "selected"
-                                    : ""}
+                                ${report.assignedVolunteer?.id === volunteer.id ? "selected" : ""}
                             >
-
                                 ${volunteer.name}
-
                             </option>
-
                         `).join("")}
-
                     </select>
 
                     <button
@@ -284,8 +259,8 @@ function renderReports(reports) {
         reportsContainer.appendChild(reportCard);
     });
 }
-function applyFilters() {
 
+function applyFilters() {
     const searchValue =
         searchInput.value.toLowerCase();
 
@@ -297,12 +272,11 @@ function applyFilters() {
 
             const animalMatch =
                 report.animalType
-                .toLowerCase()
-                .includes(searchValue);
+                    .toLowerCase()
+                    .includes(searchValue);
 
             const statusMatch =
-                selectedStatus === "ALL"
-                ||
+                selectedStatus === "ALL" ||
                 report.status === selectedStatus;
 
             return animalMatch && statusMatch;
@@ -310,14 +284,12 @@ function applyFilters() {
 
     renderReports(filteredReports);
 }
-function openReportModal(reportId) {
 
+function openReportModal(reportId) {
     const report =
         reportsData.find(r => r.id === reportId);
 
-    if (!report) {
-        return;
-    }
+    if (!report) return;
 
     modalBody.innerHTML = `
         <h2>${report.animalType}</h2>
@@ -325,7 +297,6 @@ function openReportModal(reportId) {
         <img
             src="${report.imageUrl}"
             alt="Animal"
-            style="width:100%; max-height:300px; object-fit:cover;"
         >
 
         <p>
@@ -347,13 +318,12 @@ function openReportModal(reportId) {
             <strong>Assigned Volunteer:</strong>
             ${report.assignedVolunteer?.name || "Not Assigned"}
         </p>
-                ${report.rescueNote ? `
 
+        ${report.rescueNote ? `
         <p>
             <strong>Rescue Note:</strong>
             ${report.rescueNote}
         </p>
-
         ` : ""}
     `;
 
@@ -361,9 +331,7 @@ function openReportModal(reportId) {
 }
 
 async function assignVolunteer(reportId, buttonElement) {
-
     try {
-
         const parent =
             buttonElement.parentElement;
 
@@ -373,21 +341,17 @@ async function assignVolunteer(reportId, buttonElement) {
         const volunteerId = select.value;
 
         if (!volunteerId) {
-
             alert("Please select a volunteer");
-
             return;
         }
 
         buttonElement.disabled = true;
-
         buttonElement.innerText = "Assigning...";
 
         const response = await fetch(
             `${BASE_URL}/api/admin/reports/${reportId}/assign/${volunteerId}`,
             {
                 method: "PUT",
-
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -395,55 +359,40 @@ async function assignVolunteer(reportId, buttonElement) {
         );
 
         if (!response.ok) {
-
             throw new Error(`HTTP Error: ${response.status}`);
         }
 
         alert("Volunteer assigned successfully");
-
         await fetchReports();
 
     } catch (error) {
-
         console.error("Assignment error:", error);
-
         alert("Failed to assign volunteer");
     }
 }
 
 async function init() {
-
     await fetchVolunteers();
-
     await fetchReports();
 
-    searchInput.addEventListener(
-    "input",
-    applyFilters
-    );
-
-    statusFilter.addEventListener(
-        "change",
-        applyFilters
-    );
+    searchInput.addEventListener("input", applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
 }
-closeModal.addEventListener("click", () => {
 
+closeModal.addEventListener("click", () => {
     reportModal.style.display = "none";
 });
 
 window.addEventListener("click", (event) => {
-
     if (event.target === reportModal) {
-
         reportModal.style.display = "none";
     }
 });
-function openMap(location) {
 
+function openMap(location) {
     const url =
         `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
-
     window.open(url, "_blank");
 }
+
 init();
