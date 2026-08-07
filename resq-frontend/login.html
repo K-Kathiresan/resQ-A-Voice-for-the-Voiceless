@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>resQ Login</title>
+
+    <title>Login - resQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
     <link rel="stylesheet" href="css/auth.css">
 </head>
 
@@ -13,59 +22,196 @@
 
 <div class="auth-container">
 
+    <!-- Brand Panel -->
+    <section class="auth-brand">
 
-<div class="auth-card">
+        <div class="brand-decoration brand-decoration-one"></div>
+        <div class="brand-decoration brand-decoration-two"></div>
 
-    <div class="brand-section">
+        <div class="brand-content">
 
-        <h1>resQ</h1>
+            <div class="brand-logo">
+                <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+            </div>
 
-        <p class="tagline">
-            A Voice for the Voiceless
-        </p>
+            <div class="brand-name">resQ</div>
 
-        <p class="subtitle">
-            Report, Track and Rescue Animals in Need
-        </p>
+            <p class="tagline">
+                A Voice for the Voiceless
+            </p>
 
-    </div>
+            <p class="brand-description">
+                Connecting people, volunteers and rescue teams
+                to help animals when they need it most.
+            </p>
 
-    <form id="loginForm">
+        </div>
 
-        <h2>Welcome Back</h2>
+        <div class="brand-footer">
+            <span class="brand-status-dot"></span>
+            Animal Rescue Network
+        </div>
 
-        <input
-                type="email"
-                id="email"
-                placeholder="Email Address"
-                required
-        >
+    </section>
 
-        <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-        >
 
-        <button type="submit">
-            Login
-        </button>
+    <!-- Form Panel -->
+    <section class="auth-form-panel">
 
-        <p class="auth-link">
-            New here?
-            <a href="register.html">Create Account</a>
-        </p>
+        <div class="auth-form-wrapper">
 
-    </form>
+            <div class="mobile-brand">
+                <div class="mobile-brand-logo">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+
+                <span>resQ</span>
+            </div>
+
+            <div class="form-heading">
+                <span class="form-eyebrow">Welcome back</span>
+
+                <h1>Sign in to resQ</h1>
+
+                <p>
+                    Access your rescue dashboard and continue
+                    making a difference.
+                </p>
+            </div>
+
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <svg
+                            class="input-icon"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <svg
+                            class="input-icon"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="auth-submit-btn">
+
+                    <span>Sign In</span>
+
+                    <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+
+                </button>
+
+
+                <p class="auth-link">
+                    New to resQ?
+                    <a href="register.html">Create an account</a>
+                </p>
+
+            </form>
+
+        </div>
+
+    </section>
 
 </div>
 
-
-</div>
 
 <script src="js/api.js"></script>
-
 <script src="js/login.js"></script>
 
 </body>

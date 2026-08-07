@@ -1,102 +1,261 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Create Report</title>
-
-<link rel="stylesheet" href="css/create-report.css">
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Report — resQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/create-report.css">
 </head>
-
 <body>
 
+    <!-- ── Navbar ── -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-logo">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+            </div>
+            <div class="navbar-title">
+                <span class="brand-name">resQ</span>
+                <span class="brand-sub">Citizen Dashboard</span>
+            </div>
+        </div>
 
-<div class="container">
+        <div class="navbar-right">
+            <a href="dashboard.html" class="nav-back-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+    </nav>
 
-    <h1>Create Animal Rescue Report</h1>
+    <!-- ── Page Body ── -->
+    <main class="page-container">
 
-    <form id="reportForm">
+        <!-- Hero -->
+        <div class="page-hero">
+            <div class="page-hero-content">
+                <div class="hero-eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    New Rescue Report
+                </div>
+                <h1>Report an Animal in Distress</h1>
+                <p>Provide as much detail as possible. Every piece of information helps our volunteers respond faster.</p>
+            </div>
+            <div class="hero-decoration">
+                <div class="hero-icon-ring">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
 
-        <input
-            type="text"
-            id="animalType"
-            placeholder="Enter Animal Type"
-            required
-        >
+        <!-- Form Card -->
+        <div class="form-card container">
 
-        <textarea
-            id="description"
-            placeholder="Describe Animal Condition"
-            required
-        ></textarea>
+            <form id="reportForm" novalidate>
 
-        <input
-            type="text"
-            id="location"
-            placeholder="Enter Location"
-            required
-        >
+                <!-- ── Section: Animal Information ── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="form-section-icon form-section-icon--animal">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </div>
+                        <h2>Animal Information</h2>
+                    </div>
 
-        <button
-            type="button"
-            id="getLocationBtn"
-        >
-            Use Current Location
-        </button>
+                    <div class="form-group">
+                        <label for="animalType">Animal Type <span class="required">*</span></label>
+                        <input
+                            type="text"
+                            id="animalType"
+                            placeholder="e.g. Dog, Cat, Bird, Cow…"
+                            required
+                            autocomplete="off"
+                        >
+                        <span class="field-hint">Specify the type or species of animal you found.</span>
+                    </div>
 
-        <button
-            type="button"
-            id="openCameraBtn"
-        >
-            Open Camera
-        </button>
+                    <div class="form-group">
+                        <label for="description">Condition Description <span class="required">*</span></label>
+                        <textarea
+                            id="description"
+                            placeholder="Describe the animal's condition, injuries, behaviour, and any immediate risks…"
+                            required
+                        ></textarea>
+                        <span class="field-hint">The more detail you provide, the better our volunteers can prepare.</span>
+                    </div>
+                </div>
 
-        <video
-            id="cameraPreview"
-            autoplay
-            playsinline
-            style="display:none; width:100%; margin-top:10px;"
-        ></video>
+                <!-- ── Divider ── -->
+                <div class="form-divider"></div>
 
-        <button
-            type="button"
-            id="captureBtn"
-            style="display:none;"
-        >
-            Capture Photo
-        </button>
+                <!-- ── Section: Location ── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="form-section-icon form-section-icon--location">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <h2>Location</h2>
+                    </div>
 
-        <canvas
-            id="photoCanvas"
-            style="display:none;"
-        ></canvas>
+                    <div class="form-group">
+                        <label for="location">Rescue Location <span class="required">*</span></label>
+                        <div class="location-row">
+                            <input
+                                type="text"
+                                id="location"
+                                placeholder="Enter address or use GPS below…"
+                                required
+                                autocomplete="off"
+                            >
+                            <button
+                                type="button"
+                                id="getLocationBtn"
+                                class="btn btn--outline-primary btn--icon"
+                            >
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+                                </svg>
+                                Use GPS
+                            </button>
+                        </div>
+                        <span class="field-hint">Type an address or tap <strong>Use GPS</strong> to auto-fill your current coordinates.</span>
+                    </div>
+                </div>
 
-        <input
-            type="file"
-            id="img"
-            accept="image/*"
-            capture="environment"
-            required
-        >
+                <!-- ── Divider ── -->
+                <div class="form-divider"></div>
 
-        <button type="submit">
-            Submit Report
-        </button>
+                <!-- ── Section: Rescue Evidence ── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="form-section-icon form-section-icon--camera">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h2>Rescue Evidence</h2>
+                    </div>
 
-    </form>
+                    <!-- Image source toggle -->
+                    <div class="image-source-toggle">
+                        <button type="button" class="toggle-btn toggle-btn--active" id="toggleUpload">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 16 12 12 8 16"></polyline>
+                                <line x1="12" y1="12" x2="12" y2="21"></line>
+                                <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+                            </svg>
+                            Upload Photo
+                        </button>
+                        <button type="button" class="toggle-btn" id="openCameraBtn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            Use Camera
+                        </button>
+                    </div>
 
-</div>
+                    <!-- Upload area -->
+                    <div class="form-group" id="uploadArea">
+                        <label class="file-label" for="img">
+                            <div class="file-label-inner">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="16 16 12 12 8 16"></polyline>
+                                    <line x1="12" y1="12" x2="12" y2="21"></line>
+                                    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+                                </svg>
+                                <span class="file-label-text">Click to upload or drag and drop</span>
+                                <span class="file-label-hint">JPG, PNG, WEBP — photo of the animal</span>
+                            </div>
+                            <input
+                                type="file"
+                                id="img"
+                                accept="image/*"
+                                capture="environment"
+                                required
+                            >
+                        </label>
+                    </div>
 
-<script src="js/api.js"></script>
-<script src="js/create-report.js"></script>
+                    <!-- Camera area (hidden by default) -->
+                    <div id="cameraArea" style="display:none;">
+                        <div class="camera-container">
+                            <video
+                                id="cameraPreview"
+                                autoplay
+                                playsinline
+                            ></video>
+                            <div class="camera-actions">
+                                <button
+                                    type="button"
+                                    id="captureBtn"
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <circle cx="12" cy="12" r="4"></circle>
+                                    </svg>
+                                    Capture Photo
+                                </button>
+                            </div>
+                        </div>
+                        <canvas id="photoCanvas" style="display:none;"></canvas>
+                    </div>
+
+                    <!-- Image preview (shared, shown after upload or capture) -->
+                    <div id="imagePreviewWrapper" class="image-preview-wrapper" style="display:none;">
+                        <div class="image-preview-header">
+                            <span>Preview</span>
+                            <button type="button" id="clearImageBtn" class="clear-image-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                Remove
+                            </button>
+                        </div>
+                        <img id="imagePreview" src="" alt="Image preview">
+                    </div>
+
+                </div>
+
+                <!-- ── Submit ── -->
+                <div class="form-submit-row">
+                    <button type="submit" class="btn btn--primary btn--submit">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        Submit Rescue Report
+                    </button>
+                    <a href="dashboard.html" class="btn btn--ghost">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/create-report.js"></script>
 
 </body>
-
 </html>

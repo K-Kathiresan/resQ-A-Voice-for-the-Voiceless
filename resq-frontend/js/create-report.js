@@ -17,7 +17,59 @@ const getLocationBtn =
 
 let cameraStream;
 
+// ── UI-only: toggle between upload and camera panels ──────────
+const toggleUpload   = document.getElementById("toggleUpload");
+const uploadArea     = document.getElementById("uploadArea");
+const cameraArea     = document.getElementById("cameraArea");
+
+function setActiveToggle(active) {
+    if (active === "upload") {
+        toggleUpload.classList.add("toggle-btn--active");
+        openCameraBtn.classList.remove("toggle-btn--active");
+        uploadArea.style.display  = "block";
+        cameraArea.style.display  = "none";
+        // stop any running camera stream
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+            cameraStream = null;
+        }
+    } else {
+        openCameraBtn.classList.add("toggle-btn--active");
+        toggleUpload.classList.remove("toggle-btn--active");
+        uploadArea.style.display  = "none";
+        cameraArea.style.display  = "block";
+    }
+}
+
+toggleUpload.addEventListener("click", () => {
+    setActiveToggle("upload");
+});
+
+// ── UI-only: image preview on file select ─────────────────────
+const imgInput           = document.getElementById("img");
+const imagePreviewWrapper = document.getElementById("imagePreviewWrapper");
+const imagePreview       = document.getElementById("imagePreview");
+const clearImageBtn      = document.getElementById("clearImageBtn");
+
+imgInput.addEventListener("change", () => {
+    const file = imgInput.files[0];
+    if (file) {
+        const url = URL.createObjectURL(file);
+        imagePreview.src = url;
+        imagePreviewWrapper.style.display = "block";
+    }
+});
+
+clearImageBtn.addEventListener("click", () => {
+    imgInput.value = "";
+    imagePreview.src = "";
+    imagePreviewWrapper.style.display = "none";
+});
+
+// ── Original: open camera ─────────────────────────────────────
 openCameraBtn.addEventListener("click", async () => {
+
+    setActiveToggle("camera");
 
     try {
 
@@ -29,20 +81,17 @@ openCameraBtn.addEventListener("click", async () => {
         cameraPreview.srcObject =
             cameraStream;
 
-        cameraPreview.style.display =
-            "block";
-
-        captureBtn.style.display =
-            "block";
-
     } catch (error) {
 
         console.error(error);
 
         alert("Unable to access camera");
+
+        setActiveToggle("upload");
     }
 });
 
+// ── Original: capture photo ───────────────────────────────────
 captureBtn.addEventListener("click", () => {
 
     const context =
@@ -84,6 +133,11 @@ captureBtn.addEventListener("click", () => {
         imageInput.files =
             dataTransfer.files;
 
+        // UI-only: show preview of captured photo
+        const url = URL.createObjectURL(blob);
+        imagePreview.src = url;
+        imagePreviewWrapper.style.display = "block";
+
         alert("Photo captured successfully");
 
     }, "image/jpeg");
@@ -91,13 +145,13 @@ captureBtn.addEventListener("click", () => {
     cameraStream.getTracks()
         .forEach(track => track.stop());
 
-    cameraPreview.style.display =
-        "none";
+    cameraStream = null;
 
-    captureBtn.style.display =
-        "none";
+    // Return to upload panel so preview is visible
+    setActiveToggle("upload");
 });
 
+// ── Original: GPS location ────────────────────────────────────
 getLocationBtn.addEventListener("click", () => {
 
     if (!navigator.geolocation) {
@@ -133,6 +187,7 @@ getLocationBtn.addEventListener("click", () => {
     );
 });
 
+// ── Original: form submit ─────────────────────────────────────
 reportForm.addEventListener("submit", async function (event) {
 
     event.preventDefault();
