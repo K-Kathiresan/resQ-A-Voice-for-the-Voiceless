@@ -59,36 +59,35 @@ The backend follows a layered Spring Boot architecture with JWT-based authentica
 
 
 ## Login
+<img width="1919" height="1028" alt="login" src="https://github.com/user-attachments/assets/746ec79b-7ad1-419e-b775-a7fe60a5f2ea" />
 
-<img width="1914" height="1027" alt="login" src="https://github.com/user-attachments/assets/b5ee12e1-a28c-4d5c-8c20-11e5f02e0774" />
 
 
 ---
 
 ## Create Animal Rescue Report
 
-<img width="1916" height="1025" alt="report-form" src="https://github.com/user-attachments/assets/789b7fe6-49b3-47b0-8f8f-af872933ee36" />
-
+<img width="1919" height="1035" alt="create_report" src="https://github.com/user-attachments/assets/59bf6c01-9ee7-4f41-a785-77f399207c8f" />
 
 ---
 
 ## Citizen Dashboard
 
-<img width="1912" height="1024" alt="citizen-dashboard" src="https://github.com/user-attachments/assets/4fc5be79-c6fa-4aae-8087-7480ba316c9a" />
+<img width="1909" height="1029" alt="citizen_dashboard" src="https://github.com/user-attachments/assets/4114d5c9-52ef-4da2-bd75-1f9ad998be55" />
 
 
 ---
 
 ## Volunteer Dashboard
+<img width="1919" height="983" alt="volunteer_dashboard" src="https://github.com/user-attachments/assets/1acd5438-e601-416a-bedb-7b973ebd3ffa" />
 
-<img width="1919" height="1026" alt="volunteer-dashboard" src="https://github.com/user-attachments/assets/cdbf6bec-af29-45c3-bbb2-c28b218fd2c3" />
 
 
 ---
 
 ## Administrator Dashboard
+<img width="1919" height="1044" alt="admin_dashboard" src="https://github.com/user-attachments/assets/d5873843-c070-4bc4-9d52-506e897814ec" />
 
-<img width="1917" height="1023" alt="admin-dashboard" src="https://github.com/user-attachments/assets/2cac426e-2c42-4e05-9ed6-229c0832ac1a" />
 
 
 ---
