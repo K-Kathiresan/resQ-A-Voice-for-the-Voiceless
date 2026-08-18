@@ -92,6 +92,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- GOOGLE GEMINI AI -->
+        <dependency>
+            <groupId>com.google.genai</groupId>
+            <artifactId>google-genai</artifactId>
+            <version>1.64.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -51,13 +51,44 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/uploads/**")
+                        .permitAll()
 
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/uploads/**"
                         )
                         .permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/uploads/**"
+                        )
+                        .permitAll()
+
+                        // Temporary Gemini connection test
+                        .requestMatchers("/api/ai/test")
+                        .permitAll()
+
+                        // Real AI feature - requires login
+                        .requestMatchers("/api/ai/first-aid")
+                        .authenticated()
+
+                        // ADMIN ADOPTION OPERATIONS
+                        .requestMatchers(
+                                "/api/adoption-applications/*/review",
+                                "/api/adoption-applications/*/approve",
+                                "/api/adoption-applications/*/reject"
+                        )
+                        .hasRole("ADMIN")
+
+                        // ADOPTION OPERATIONS
+                        .requestMatchers("/api/adoptions/**")
+                        .authenticated()
+
+                        .requestMatchers(
+                                "/api/adoption-applications/apply"
+                        )
+                        .hasRole("CITIZEN")
 
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")

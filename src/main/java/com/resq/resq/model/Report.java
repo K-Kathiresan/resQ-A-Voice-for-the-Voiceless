@@ -1,32 +1,13 @@
 package com.resq.resq.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
-import com.resq.resq.exception.FileValidationException;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
 @Entity
 @Table(name = "reports")
 public class Report {
@@ -35,38 +16,54 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private String animalType;
 
     private String description;
 
     private String location;
+
+
     @Enumerated(EnumType.STRING)
     private ReportStatus status = ReportStatus.PENDING;
 
+
+    @Enumerated(EnumType.STRING)
+    private AiUrgencyLevel urgencyLevel;
+
+
     private String imageUrl;
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
 
     @ManyToOne
     @JoinColumn(name = "volunteer_id")
     private Volunteer volunteer;
 
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 
     @ManyToOne
     @JoinColumn(name = "assigned_volunteer_id")
     private User assignedVolunteer;
 
+
     private String rescueNote;
+
 
     public Report() {
     }
+
 
     public Long getId() {
         return id;
@@ -76,6 +73,7 @@ public class Report {
         this.id = id;
     }
 
+
     public String getAnimalType() {
         return animalType;
     }
@@ -83,6 +81,7 @@ public class Report {
     public void setAnimalType(String animalType) {
         this.animalType = animalType;
     }
+
 
     public String getDescription() {
         return description;
@@ -92,6 +91,7 @@ public class Report {
         this.description = description;
     }
 
+
     public String getLocation() {
         return location;
     }
@@ -100,13 +100,26 @@ public class Report {
         this.location = location;
     }
 
+
     public ReportStatus getStatus() {
-    return status;
+        return status;
     }
 
     public void setStatus(ReportStatus status) {
         this.status = status;
     }
+
+
+    public AiUrgencyLevel getUrgencyLevel() {
+        return urgencyLevel;
+    }
+
+    public void setUrgencyLevel(
+            AiUrgencyLevel urgencyLevel
+    ) {
+        this.urgencyLevel = urgencyLevel;
+    }
+
 
     public String getImageUrl() {
         return imageUrl;
@@ -116,28 +129,40 @@ public class Report {
         this.imageUrl = imageUrl;
     }
 
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(
+            LocalDateTime createdAt
+    ) {
         this.createdAt = createdAt;
     }
+
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(
+            LocalDateTime updatedAt
+    ) {
         this.updatedAt = updatedAt;
     }
+
+
     public Volunteer getVolunteer() {
-    return volunteer;
+        return volunteer;
     }
 
-    public void setVolunteer(Volunteer volunteer) {
+    public void setVolunteer(
+            Volunteer volunteer
+    ) {
         this.volunteer = volunteer;
     }
+
+
     public User getUser() {
         return user;
     }
@@ -145,18 +170,26 @@ public class Report {
     public void setUser(User user) {
         this.user = user;
     }
+
+
     public User getAssignedVolunteer() {
         return assignedVolunteer;
     }
 
-    public void setAssignedVolunteer(User assignedVolunteer) {
+    public void setAssignedVolunteer(
+            User assignedVolunteer
+    ) {
         this.assignedVolunteer = assignedVolunteer;
     }
+
 
     public String getRescueNote() {
         return rescueNote;
     }
-    public void setRescueNote(String rescueNote) {
+
+    public void setRescueNote(
+            String rescueNote
+    ) {
         this.rescueNote = rescueNote;
     }
 }

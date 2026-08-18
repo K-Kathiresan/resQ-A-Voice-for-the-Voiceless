@@ -2,6 +2,7 @@ package com.resq.resq.controller;
 
 import com.resq.resq.payload.ApiResponse;
 import com.resq.resq.dto.ReportResponseDTO;
+import com.resq.resq.model.AiUrgencyLevel;
 import com.resq.resq.model.ReportStatus;
 import com.resq.resq.service.ReportService;
 
@@ -23,6 +24,7 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
+
     @PostMapping
     public ResponseEntity<ApiResponse<ReportResponseDTO>> createReport(
 
@@ -39,16 +41,24 @@ public class ReportController {
             String location,
 
             @RequestParam("image")
-            MultipartFile image
+            MultipartFile image,
+
+            @RequestParam(
+                    value = "urgencyLevel",
+                    required = false
+            )
+            AiUrgencyLevel urgencyLevel
 
     ) throws IOException {
 
-        ReportResponseDTO createdReport = reportService.createReport(
-                animalType,
-                description,
-                location,
-                image
-        );
+        ReportResponseDTO createdReport =
+                reportService.createReport(
+                        animalType,
+                        description,
+                        location,
+                        image,
+                        urgencyLevel
+                );
 
         ApiResponse<ReportResponseDTO> response =
                 new ApiResponse<>(
@@ -57,13 +67,18 @@ public class ReportController {
                         createdReport
                 );
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.CREATED
+        );
     }
+
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<ReportResponseDTO>>> getAllReports() {
 
-        List<ReportResponseDTO> reports = reportService.getAllReports();
+        List<ReportResponseDTO> reports =
+                reportService.getAllReports();
 
         ApiResponse<List<ReportResponseDTO>> response =
                 new ApiResponse<>(
@@ -75,12 +90,14 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ReportResponseDTO>> getReportById(
             @PathVariable Long id
     ) {
 
-        ReportResponseDTO report = reportService.getReportById(id);
+        ReportResponseDTO report =
+                reportService.getReportById(id);
 
         ApiResponse<ReportResponseDTO> response =
                 new ApiResponse<>(
@@ -92,6 +109,7 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
+
     @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<ReportResponseDTO>> updateStatus(
 
@@ -102,7 +120,10 @@ public class ReportController {
     ) {
 
         ReportResponseDTO updatedReport =
-                reportService.updateStatus(id, status);
+                reportService.updateStatus(
+                        id,
+                        status
+                );
 
         ApiResponse<ReportResponseDTO> response =
                 new ApiResponse<>(
@@ -113,6 +134,7 @@ public class ReportController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteReport(
@@ -131,33 +153,37 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
+
     @PutMapping("/{reportId}/assign/{volunteerId}")
-        public ResponseEntity<ApiResponse<ReportResponseDTO>> assignVolunteer(
-                @PathVariable Long reportId,
-                @PathVariable Long volunteerId
-        ) {
+    public ResponseEntity<ApiResponse<ReportResponseDTO>> assignVolunteer(
+            @PathVariable Long reportId,
+            @PathVariable Long volunteerId
+    ) {
 
-                ReportResponseDTO updatedReport =
-                        reportService.assignVolunteer(reportId, volunteerId);
+        ReportResponseDTO updatedReport =
+                reportService.assignVolunteer(
+                        reportId,
+                        volunteerId
+                );
 
-                ApiResponse<ReportResponseDTO> response =
-                        new ApiResponse<>(
-                                true,
-                                "Volunteer assigned successfully",
-                                updatedReport
-                        );
+        ApiResponse<ReportResponseDTO> response =
+                new ApiResponse<>(
+                        true,
+                        "Volunteer assigned successfully",
+                        updatedReport
+                );
 
-                return ResponseEntity.ok(response);
-        }
+        return ResponseEntity.ok(response);
+    }
 
 
-        @PutMapping("/{id}")
-        public ApiResponse<ReportResponseDTO> updateReport(
-                @PathVariable Long id,
-                @RequestParam String animalType,
-                @RequestParam String description,
-                @RequestParam String location
-        ) {
+    @PutMapping("/{id}")
+    public ApiResponse<ReportResponseDTO> updateReport(
+            @PathVariable Long id,
+            @RequestParam String animalType,
+            @RequestParam String description,
+            @RequestParam String location
+    ) {
 
         return new ApiResponse<>(
                 true,
@@ -169,11 +195,14 @@ public class ReportController {
                         location
                 )
         );
-        }
-        @GetMapping("/my-reports")
-        public ResponseEntity<ApiResponse<List<ReportResponseDTO>>> getMyReports() {
+    }
 
-        List<ReportResponseDTO> reports = reportService.getMyReports();
+
+    @GetMapping("/my-reports")
+    public ResponseEntity<ApiResponse<List<ReportResponseDTO>>> getMyReports() {
+
+        List<ReportResponseDTO> reports =
+                reportService.getMyReports();
 
         ApiResponse<List<ReportResponseDTO>> response =
                 new ApiResponse<>(
@@ -183,5 +212,5 @@ public class ReportController {
                 );
 
         return ResponseEntity.ok(response);
-}
+    }
 }
