@@ -35,4 +35,51 @@ public class AdoptionController {
                 adoptionAnimalService.getAnimalById(id)
         );
     }
+
+        /*
+    * ============================================================
+    * CREATE ADOPTION ANIMAL
+    * ============================================================
+    *
+    * Only ADMIN can expose a rescued animal for adoption.
+    */
+    @PostMapping("/create")
+    public ResponseEntity<AdoptionAnimal> createAdoptionAnimal(
+
+            @RequestParam Long reportId,
+            @RequestParam String breed,
+            @RequestParam String age,
+            @RequestParam String gender,
+            @RequestParam String healthStatus,
+            @RequestParam String temperament,
+            @RequestParam String description) {
+
+        AdoptionAnimal animal =
+                adoptionAnimalService.createAdoptionAnimal(
+                        reportId,
+                        breed,
+                        age,
+                        gender,
+                        healthStatus,
+                        temperament,
+                        description
+                );
+
+        return ResponseEntity.ok(animal);
+    }
+        /*
+    * ============================================================
+    * MARK ANIMAL READY FOR ADOPTION
+    * ============================================================
+    *
+    * Only ADMIN can make an animal publicly available.
+    */
+    @PutMapping("/{id}/ready")
+    public ResponseEntity<AdoptionAnimal> markReadyForAdoption(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                adoptionAnimalService.markReadyForAdoption(id)
+        );
+    }
 }

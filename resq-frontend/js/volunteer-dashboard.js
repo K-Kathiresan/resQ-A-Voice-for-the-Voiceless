@@ -49,6 +49,8 @@ async function fetchAssignedReports() {
 
         const data = await response.json();
 
+        console.log("Volunteer reports:", data);
+
         renderReports(data);
 
     } catch (error) {
@@ -60,6 +62,64 @@ async function fetchAssignedReports() {
         `;
 
     }
+    
+}
+
+function getOperationalPriority(status) {
+
+    if (
+        status === "ON_THE_WAY" ||
+        status === "RESCUING"
+    ) {
+        return 1;
+    }
+
+    if (status === "ASSIGNED") {
+        return 2;
+    }
+
+    if (
+        status === "RESCUED" ||
+        status === "FAILED"
+    ) {
+        return 3;
+    }
+
+    return 4;
+
+}
+
+function getUrgencyPriority(urgencyLevel) {
+
+    const urgencyOrder = {
+        CRITICAL: 1,
+        HIGH: 2,
+        MEDIUM: 3,
+        LOW: 4
+    };
+
+    return urgencyOrder[urgencyLevel] || 5;
+
+}
+
+function sortReportsForVolunteer(reports) {
+
+    return [...reports].sort((a, b) => {
+
+        const operationalDifference =
+            getOperationalPriority(a.status) -
+            getOperationalPriority(b.status);
+
+        if (operationalDifference !== 0) {
+            return operationalDifference;
+        }
+
+        return (
+            getUrgencyPriority(a.urgencyLevel) -
+            getUrgencyPriority(b.urgencyLevel)
+        );
+
+    });
 
 }
 
@@ -74,6 +134,7 @@ function renderReports(reports) {
         `;
 
         return;
+
     }
 
     const assigned =
@@ -107,7 +168,10 @@ function renderReports(reports) {
         "completedCount"
     ).innerText = completed;
 
-    reports.forEach((report) => {
+    const sortedReports =
+        sortReportsForVolunteer(reports);
+
+    sortedReports.forEach((report) => {
 
         const statusClass =
             `status-${report.status.toLowerCase()}`;
@@ -115,6 +179,16 @@ function renderReports(reports) {
         const isCompleted =
             report.status === "RESCUED" ||
             report.status === "FAILED";
+
+        const urgencyClass =
+            report.urgencyLevel
+                ? `urgency-${report.urgencyLevel.toLowerCase()}`
+                : "";
+
+        const urgencyLabel =
+            report.urgencyLevel === "HIGH"
+                ? "HIGH PRIORITY"
+                : report.urgencyLevel;
 
         assignedReportsContainer.innerHTML += `
 
@@ -133,9 +207,18 @@ function renderReports(reports) {
                     <strong>Location:</strong>
                     ${report.location}
                 </p>
-                    <button onclick="openLocation('${report.location}')">
-                        Open Location
-                    </button>
+
+                <button onclick="openLocation('${report.location}')">
+                    Open Location
+                </button>
+
+                ${report.urgencyLevel ? `
+
+                    <div class="urgency-badge ${urgencyClass}">
+                        ${urgencyLabel}
+                    </div>
+
+                ` : ""}
 
                 <div class="status-badge ${statusClass}">
                     ${report.status}
@@ -143,24 +226,24 @@ function renderReports(reports) {
 
                 ${isCompleted ? `
 
-                <div class="rescue-note-section">
+                    <div class="rescue-note-section">
 
-                    <h4>Rescue Note</h4>
+                        <h4>Rescue Note</h4>
 
-                    <textarea
-                        id="note-${report.id}"
-                        placeholder="Enter rescue summary..."
-                    >${report.rescueNote || ""}</textarea>
+                        <textarea
+                            id="note-${report.id}"
+                            placeholder="Enter rescue summary..."
+                        >${report.rescueNote || ""}</textarea>
 
-                    <button
-                        onclick="saveRescueNote(${report.id})"
-                    >
-                        Save Note
-                    </button>
+                        <button
+                            onclick="saveRescueNote(${report.id})"
+                        >
+                            Save Note
+                        </button>
 
-                </div>
+                    </div>
 
-            ` : ""}
+                ` : ""}
 
                 <div class="button-group">
 
@@ -341,6 +424,7 @@ async function saveRescueNote(reportId) {
             throw new Error(
                 "Failed to save rescue note"
             );
+
         }
 
         alert("Rescue note saved successfully");
@@ -352,14 +436,18 @@ async function saveRescueNote(reportId) {
         console.error(error);
 
         alert("Failed to save rescue note");
+
     }
+
 }
 
 function openLocation(location) {
+
     const mapsUrl =
         `https://www.google.com/maps/dir/?api=1&destination=${location}`;
 
     window.open(mapsUrl, "_blank");
+
 }
 
 fetchAssignedReports();

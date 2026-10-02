@@ -59,11 +59,6 @@ public class SecurityConfig {
                                 "/uploads/**"
                         )
                         .permitAll()
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/uploads/**"
-                        )
-                        .permitAll()
 
                         // Temporary Gemini connection test
                         .requestMatchers("/api/ai/test")
@@ -81,14 +76,25 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
-                        // ADOPTION OPERATIONS
+                        // CITIZEN ADOPTION OPERATIONS
+                        .requestMatchers("/api/adoption-applications/apply")
+                        .hasRole("CITIZEN")
+
+                        .requestMatchers("/api/adoption-applications/my")
+                        .hasRole("CITIZEN")
+
+                        // ADMIN - VIEW ALL ADOPTION APPLICATIONS
+                        .requestMatchers("/api/adoption-applications")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers("/api/adoptions/create")
+                        .hasRole("ADMIN")
                         .requestMatchers("/api/adoptions/**")
                         .authenticated()
 
-                        .requestMatchers(
-                                "/api/adoption-applications/apply"
-                        )
-                        .hasRole("CITIZEN")
+                        // BROWSE AVAILABLE ADOPTION ANIMALS
+                        .requestMatchers("/api/adoptions/**")
+                        .authenticated()
 
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")

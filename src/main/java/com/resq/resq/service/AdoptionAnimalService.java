@@ -70,4 +70,26 @@ public class AdoptionAnimalService {
                 .orElseThrow(() ->
                         new RuntimeException("Adoption animal not found"));
     }
+
+        public AdoptionAnimal markReadyForAdoption(Long animalId) {
+
+        AdoptionAnimal animal =
+                adoptionAnimalRepository.findById(animalId)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Adoption animal not found"
+                                ));
+
+        if (animal.getStatus() != AdoptionStatus.NOT_READY) {
+            throw new RuntimeException(
+                    "Only animals that are not ready can be marked ready"
+            );
+        }
+
+        animal.setStatus(
+                AdoptionStatus.READY_FOR_ADOPTION
+        );
+
+        return adoptionAnimalRepository.save(animal);
+    }
 }

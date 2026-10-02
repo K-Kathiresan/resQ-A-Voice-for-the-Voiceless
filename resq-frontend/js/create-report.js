@@ -464,11 +464,18 @@ analyzeAiBtn.addEventListener(
 // ── Display AI guidance ────────────────────────────────────────
 
 function displayAiGuidance(data) {
+    console.log("AI response data:", data);
+    console.log("AI urgency received:", data.urgencyLevel);
 
     const urgency =
         data.urgencyLevel || "MEDIUM";
     analyzedUrgencyLevel =
     data.urgencyLevel || null;
+
+        console.log(
+        "Stored analyzed urgency:",
+        analyzedUrgencyLevel
+    );
 
 
     // Remove old urgency classes
@@ -632,7 +639,6 @@ function getSafetyWarning(data) {
 
 }
 
-
 // ── Submit rescue report ───────────────────────────────────────
 
 reportForm.addEventListener(
@@ -693,13 +699,48 @@ reportForm.addEventListener(
             "image",
             image
         );
-        if (analyzedUrgencyLevel) {
-        formData.append(
-            "urgencyLevel",
+
+
+        // ── AI urgency ─────────────────────────────────────────
+
+        console.log(
+            "=== REPORT SUBMISSION DEBUG ==="
+        );
+
+        console.log(
+            "analyzedUrgencyLevel:",
             analyzedUrgencyLevel
         );
-    }
 
+
+        if (analyzedUrgencyLevel) {
+
+            formData.append(
+                "urgencyLevel",
+                analyzedUrgencyLevel
+            );
+
+            console.log(
+                "urgencyLevel added to FormData:",
+                analyzedUrgencyLevel
+            );
+
+        } else {
+
+            console.log(
+                "No urgencyLevel available - submitting without urgency"
+            );
+
+        }
+
+
+        console.log(
+            "Final FormData urgencyLevel:",
+            formData.get("urgencyLevel")
+        );
+
+
+        // ── Submit report ──────────────────────────────────────
 
         const response =
             await apiRequest(
@@ -710,7 +751,10 @@ reportForm.addEventListener(
             );
 
 
-        console.log(response);
+        console.log(
+            "Report API response:",
+            response
+        );
 
 
         if (
@@ -724,6 +768,7 @@ reportForm.addEventListener(
 
             window.location.href =
                 "dashboard.html";
+
         }
 
     }
