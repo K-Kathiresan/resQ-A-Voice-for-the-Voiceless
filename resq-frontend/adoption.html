@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adoption — resQ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/citizen-dashboard.css">
+    <link rel="stylesheet" href="css/adoption.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-brand">
+        <div class="navbar-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </div>
+        <div class="navbar-title">
+            <span class="brand-name">resQ</span>
+            <span class="brand-sub">Adoption</span>
+        </div>
+    </div>
+    <div class="navbar-right">
+        <a id="backLink" class="ad-nav-link" href="my-reports.html">Dashboard</a>
+        <button id="logoutBtn" type="button">Logout</button>
+    </div>
+</nav>
+
+<main class="ad-container">
+
+    <section class="ad-hero">
+        <h1>Give them a second chance.</h1>
+        <p>Every animal here was reported, rescued and nursed back to health through resQ. Now they're ready for a safe, loving home.</p>
+        <ol class="ad-journey" aria-label="The resQ journey">
+            <li>Report</li><li>Rescue</li><li>Recovery</li><li class="is-current" aria-current="step">Adoption</li><li>Forever home</li>
+        </ol>
+        <div class="ad-hero-actions">
+            <a class="ad-btn ad-btn--primary" href="#animals">Find a Companion</a>
+            <a class="ad-btn ad-btn--ghost" href="#applications" data-role="CITIZEN" hidden>My Applications</a>
+        </div>
+    </section>
+
+    <section id="animals" class="ad-section" aria-labelledby="animalsTitle">
+        <div class="ad-section-head">
+            <h2 id="animalsTitle">Animals Looking for a Home</h2>
+            <span id="animalsCount" class="ad-count"></span>
+        </div>
+        <div id="animalsGrid" class="ad-grid" aria-live="polite" aria-busy="true"></div>
+    </section>
+
+    <section id="applications" class="ad-section" data-role="CITIZEN" hidden aria-labelledby="appsTitle">
+        <div class="ad-section-head"><h2 id="appsTitle">My Applications</h2></div>
+        <div id="appsList" class="ad-apps" aria-live="polite"></div>
+    </section>
+
+</main>
+
+<dialog id="detailDialog" class="ad-dialog" aria-label="Animal details">
+    <button class="ad-dialog-close" type="button" data-action="close-dialog" aria-label="Close">&times;</button>
+    <div id="detailBody" class="ad-dialog-scroll"></div>
+</dialog>
+
+<dialog id="applyDialog" class="ad-dialog ad-dialog--narrow" aria-labelledby="applyTitle">
+    <button class="ad-dialog-close" type="button" data-action="close-dialog" aria-label="Close">&times;</button>
+    <div class="ad-dialog-scroll">
+        <form id="applyForm" class="ad-form" novalidate>
+            <header>
+                <div id="applySummary" class="ad-apply-summary"></div>
+                <h2 id="applyTitle">Apply to adopt</h2>
+                <p class="ad-muted">Tell us a little about you and your home so we can find the right match.</p>
+            </header>
+
+            <div id="applyBanner" class="ad-banner" role="alert" hidden></div>
+
+            <div class="ad-field">
+                <label for="housingType">Where do you live? <span aria-hidden="true">*</span></label>
+                <select id="housingType" name="housingType" required>
+                    <option value="">Select housing type</option>
+                    <option>Apartment or flat</option>
+                    <option>House with a garden</option>
+                    <option>House without a garden</option>
+                    <option>Farm or rural property</option>
+                    <option>Other</option>
+                </select>
+                <span class="ad-error" id="housingTypeError"></span>
+            </div>
+
+            <div class="ad-field">
+                <label for="animalExperience">Experience with animals <span aria-hidden="true">*</span></label>
+                <select id="animalExperience" name="animalExperience" required>
+                    <option value="">Select your experience</option>
+                    <option>First-time pet parent</option>
+                    <option>Some experience</option>
+                    <option>Very experienced</option>
+                </select>
+                <span class="ad-error" id="animalExperienceError"></span>
+            </div>
+
+            <div class="ad-field">
+                <label for="reason">Why would you like to adopt? <span aria-hidden="true">*</span></label>
+                <textarea id="reason" name="reason" rows="4" maxlength="1000" required placeholder="Share what you can offer this animal…"></textarea>
+                <span class="ad-hint"><span id="reasonCount">0</span>/1000</span>
+                <span class="ad-error" id="reasonError"></span>
+            </div>
+
+            <div class="ad-field">
+                <label for="otherPets">Other pets at home <span aria-hidden="true">*</span></label>
+                <input id="otherPets" name="otherPets" type="text" maxlength="100" required placeholder="e.g. One cat — or None">
+                <span class="ad-error" id="otherPetsError"></span>
+            </div>
+
+            <fieldset class="ad-field" id="contactGroup">
+                <legend>How should we contact you? <span aria-hidden="true">*</span></legend>
+                <div class="ad-segment">
+                    <label><input type="radio" name="contactPreference" value="Phone call"><span>Phone call</span></label>
+                    <label><input type="radio" name="contactPreference" value="Email"><span>Email</span></label>
+                    <label><input type="radio" name="contactPreference" value="WhatsApp"><span>WhatsApp</span></label>
+                </div>
+                <span class="ad-error" id="contactPreferenceError"></span>
+            </fieldset>
+
+            <div class="ad-form-actions">
+                <button type="button" class="ad-btn ad-btn--ghost" data-action="close-dialog">Cancel</button>
+                <button type="submit" id="applySubmit" class="ad-btn ad-btn--primary">Submit Adoption Application</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<div id="toasts" class="ad-toasts" role="status" aria-live="polite"></div>
+
+<script src="js/api.js"></script>
+<script src="js/adoption.js"></script>
+</body>
+</html>
